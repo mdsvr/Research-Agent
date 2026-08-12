@@ -118,7 +118,8 @@ def providers(config):
         else:
             click.secho(f"  {name:<12} OK     responded as {answer.generator}", fg="green")
 
-    click.echo("\nSet a key and re-run, e.g.:  $env:GROQ_API_KEY=\"gsk_...\"   (PowerShell)")
+    click.echo("\nSet a key and re-run, e.g.:  $env:GROQ_API_KEY=\"gsk_...\"   (PowerShell)\n"
+               "Also honoured: GEMINI_API_KEY, OPENROUTER_API_KEY. See .env.example.")
 
 
 @main.command()

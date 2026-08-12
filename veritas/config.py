@@ -24,13 +24,13 @@ class RerankConfig(BaseModel):
 
 class VerifyConfig(BaseModel):
     enabled: bool = True
-    model: str = "cross-encoder/nli-deberta-v3-small"
+    model: str = "lytang/MiniCheck-DeBERTa-v3-Large"
     support_threshold: float = 0.5
     allow_heuristic_fallback: bool = False
     # Index of the "supported" output column. Left null, it is read from the model's own
     # id2label map, which only works for checkpoints that name the label. Binary
     # fact-checkers (MiniCheck) ship id2label={0: LABEL_0, 1: LABEL_1} and need it stated.
-    entail_index: Optional[int] = None
+    entail_index: Optional[int] = 1
     # Characters of source context kept either side of a claim's quote when building the
     # entailment premise. Too wide and the NLI model loses the claim in the noise; too
     # narrow and it accepts plausible-sounding substitutions. See verify.build_premise.
@@ -43,8 +43,8 @@ class AbstainConfig(BaseModel):
     min_supported_claims: int = 1
 
 class LLMConfig(BaseModel):
-    providers: List[str] = ["groq", "gemini", "openrouter", "ollama", "offline"]
-    groq_model: str = "llama-3.3-70b-versatile"
+    providers: List[str] = ["groq", "openrouter", "gemini", "ollama", "offline"]
+    groq_model: str = "openai/gpt-oss-120b"
     gemini_model: str = "gemini-3.6-flash"
     openrouter_model: str = "openai/gpt-oss-20b:free"
     ollama_model: str = "llama3.1:8b"

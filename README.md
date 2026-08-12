@@ -21,7 +21,7 @@ py -m veritas eval --gold eval/holdout.jsonl               # out-of-sample quest
 py -m veritas calibrate                                    # Gate A threshold sweep
 py -m veritas grade                                        # hand-grade answer correctness
 py -m eval.bench_verifier                                  # compare NLI verifier models
-py test_veritas.py                                         # self-check (38 assertions)
+py test_veritas.py                                         # self-check (40 assertions)
 ```
 
 ### Running with a generator (Groq)
@@ -35,10 +35,12 @@ harness refuses to present its end-to-end numbers as representative — see
 Groq is the default provider: free tier, fast, and OpenAI-compatible JSON mode.
 
 1. Get a key at <https://console.groq.com/keys> (starts `gsk_`).
-2. Open **`.env`** in the repo root and paste it in — no quotes, no spaces:
+2. Copy `.env.example` to `.env` and paste in the keys you have — no quotes, no spaces:
 
    ```ini
    GROQ_API_KEY=gsk_your_key_here
+   GEMINI_API_KEY=your_key_here        # optional
+   OPENROUTER_API_KEY=your_key_here    # optional
    ```
 
    `.env` is loaded automatically on `import veritas`, so every command and the notebook
@@ -52,7 +54,7 @@ Groq is the default provider: free tier, fast, and OpenAI-compatible JSON mode.
    py -m veritas eval                     # note: no --offline
    ```
 
-Model is `llm.groq_model` in `config.yaml`, default `llama-3.3-70b-versatile`. Smaller and
+Model is `llm.groq_model` in `config.yaml` (currently `openai/gpt-oss-120b`). Smaller and
 faster: `llama-3.1-8b-instant`. Providers are tried in the order under `llm.providers`,
 then a prompt-hash replay cache, then the extractive fallback. A provider with no key set is
 skipped silently; malformed JSON is re-asked once (`llm.max_retries`) before falling through.
