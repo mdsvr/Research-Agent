@@ -1,0 +1,644 @@
+{
+  "total_questions": 30,
+  "question_set": "eval/gold.jsonl",
+  "offline": false,
+  "variants": {
+    "veritas_full": {
+      "abstention": {
+        "ta": 11,
+        "fa": 0,
+        "fr": 4,
+        "tr": 15,
+        "accuracy": 0.8667,
+        "false_answer_rate": 0.0,
+        "over_refusal_rate": 0.2667
+      },
+      "gold_citation": {
+        "precision": 0.8182,
+        "recall": 0.5,
+        "f1": 0.6207,
+        "questions_scored": 15,
+        "citations_predicted": 11,
+        "citations_gold": 18
+      },
+      "gold_answer_recall": {
+        "mean_token_recall": 0.4646,
+        "questions_scored": 15
+      },
+      "retrieval": {
+        "recall_at_final_k": 1.0,
+        "mrr": 0.9333,
+        "questions_scored": 15
+      },
+      "self_consistency": {
+        "entailed_rate": 0.9231,
+        "citation_necessity": 0.9231,
+        "claims": 13,
+        "backends": [
+          "lytang/MiniCheck-DeBERTa-v3-Large"
+        ]
+      },
+      "auroc_signal": 0.9556,
+      "generators": {
+        "groq:openai/gpt-oss-120b": 22
+      },
+      "records": [
+        {
+          "qid": "q001",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S1::c00"
+          ],
+          "gold_answer": "Alters functions within liblzma targeting OpenSSH server authentication linked against systemd",
+          "predicted_chunk_ids": [
+            "S1::c02"
+          ],
+          "answer_text": "The XZ Utils backdoor intercepts the RSA key signature verification function `RSA_public_decrypt`.",
+          "context_injected": [
+            "S1::c00",
+            "S1::c03",
+            "S1::c02",
+            "S6::c01",
+            "S1::c01",
+            "S6::c00"
+          ]
+        },
+        {
+          "qid": "q002",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S1::c02"
+          ],
+          "gold_answer": "RSA_public_decrypt function in OpenSSH sshd",
+          "predicted_chunk_ids": [
+            "S1::c01"
+          ],
+          "answer_text": "The XZ backdoor payload intercepts the RSA_public_decrypt function in OpenSSH.",
+          "context_injected": [
+            "S1::c01",
+            "S1::c02",
+            "S1::c00",
+            "S6::c01",
+            "S5::c02",
+            "S1::c03"
+          ]
+        },
+        {
+          "qid": "q003",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S1::c02",
+            "S1::c03"
+          ],
+          "gold_answer": "Andres Freund while benchmarking SSH latencies",
+          "predicted_chunk_ids": [
+            "S1::c03"
+          ],
+          "answer_text": "Andres Freund initially identified the CVE-2024-3094 vulnerability.",
+          "context_injected": [
+            "S1::c03",
+            "S1::c02",
+            "S1::c00",
+            "S3::c00",
+            "S6::c01",
+            "S1::c01"
+          ]
+        },
+        {
+          "qid": "q004",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": true,
+          "gold_chunk_ids": [
+            "S1::c03"
+          ],
+          "gold_answer": "10.0 Critical",
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S1::c03",
+            "S3::c02",
+            "S5::c03",
+            "S1::c00",
+            "S3::c00",
+            "S6::c01"
+          ]
+        },
+        {
+          "qid": "q005",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S2::c01",
+            "S2::c02"
+          ],
+          "gold_answer": "Use parameterized queries, positive server-side input validation, and context-aware escaping",
+          "predicted_chunk_ids": [
+            "S2::c01"
+          ],
+          "answer_text": "Parameterized queries (also known as prepared statements) are recommended for all database access. Positive server-side input validation with strict allowlists is recommended.",
+          "context_injected": [
+            "S2::c01",
+            "S2::c00",
+            "S2::c03",
+            "S2::c02",
+            "S7::c01",
+            "S4::c00"
+          ]
+        },
+        {
+          "qid": "q006",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S3::c00"
+          ],
+          "gold_answer": "Log4Shell remote code execution vulnerability in Apache Log4j2",
+          "predicted_chunk_ids": [
+            "S3::c00"
+          ],
+          "answer_text": "CVE-2021-44228 refers to the Log4Shell remote code execution vulnerability in Apache Log4j2.",
+          "context_injected": [
+            "S3::c00",
+            "S1::c00",
+            "S1::c03",
+            "S2::c02",
+            "S7::c00",
+            "S2::c00"
+          ]
+        },
+        {
+          "qid": "q007",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S3::c01"
+          ],
+          "gold_answer": "Log4j resolves JNDI URLs contacting LDAP server to retrieve and execute remote Java classes",
+          "predicted_chunk_ids": [
+            "S3::c01"
+          ],
+          "answer_text": "The Log4j JNDI lookup exploit triggers remote code execution by causing the JNDI lookup plugin to resolve a supplied LDAP URL, retrieve a remote Java class, and execute it within the JVM under the service account's privileges.",
+          "context_injected": [
+            "S3::c01",
+            "S3::c00",
+            "S3::c02",
+            "S6::c01",
+            "S1::c01",
+            "S1::c02"
+          ]
+        },
+        {
+          "qid": "q008",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S4::c00"
+          ],
+          "gold_answer": "Automatically disables inactive accounts after 90 days",
+          "predicted_chunk_ids": [
+            "S4::c00"
+          ],
+          "answer_text": "The recommended account disablement threshold for inactive accounts in NIST AC-2 is 90 days.",
+          "context_injected": [
+            "S4::c00",
+            "S4::c01",
+            "S1::c03",
+            "S2::c02",
+            "S8::c01",
+            "S4::c02"
+          ]
+        },
+        {
+          "qid": "q009",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S4::c01"
+          ],
+          "gold_answer": "5 consecutive invalid attempts within a 15-minute window",
+          "predicted_chunk_ids": [
+            "S4::c01"
+          ],
+          "answer_text": "Five consecutive invalid logon attempts trigger account lockout.",
+          "context_injected": [
+            "S4::c01",
+            "S4::c00",
+            "S1::c03",
+            "S1::c02",
+            "S6::c01",
+            "S8::c01"
+          ]
+        },
+        {
+          "qid": "q010",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S5::c01"
+          ],
+          "gold_answer": "Missing bounds checking on TLS heartbeat request payload length field using memcpy",
+          "predicted_chunk_ids": [
+            "S5::c01"
+          ],
+          "answer_text": "The root cause of the Heartbleed vulnerability is missing bounds checking on the TLS heartbeat extension request payload.",
+          "context_injected": [
+            "S5::c00",
+            "S5::c01",
+            "S1::c03",
+            "S1::c02",
+            "S6::c01",
+            "S3::c00"
+          ]
+        },
+        {
+          "qid": "q011",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S6::c00"
+          ],
+          "gold_answer": "Threat group UNC2452",
+          "predicted_chunk_ids": [
+            "S6::c00"
+          ],
+          "answer_text": "The SolarWinds SUNBURST attack was executed by threat group UNC2452.",
+          "context_injected": [
+            "S6::c00",
+            "S6::c01",
+            "S6::c02",
+            "S1::c00",
+            "S3::c00",
+            "S1::c03"
+          ]
+        },
+        {
+          "qid": "q012",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": false,
+          "gold_chunk_ids": [
+            "S6::c01"
+          ],
+          "gold_answer": "Dormant for up to 14 days",
+          "predicted_chunk_ids": [
+            "S6::c01"
+          ],
+          "answer_text": "SUNBURST remains dormant for up to 14 days before contacting C2 servers.",
+          "context_injected": [
+            "S6::c01",
+            "S6::c00",
+            "S1::c03",
+            "S4::c00",
+            "S4::c01",
+            "S1::c02"
+          ]
+        },
+        {
+          "qid": "q013",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": true,
+          "gold_chunk_ids": [
+            "S7::c00",
+            "S7::c01"
+          ],
+          "gold_answer": "Zero raw pointers in public API, requiring safe wrappers SafeRef or UniquePtr",
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S7::c00",
+            "S7::c01",
+            "S7::c02",
+            "S1::c03",
+            "S8::c01",
+            "S2::c02"
+          ]
+        },
+        {
+          "qid": "q014",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": true,
+          "gold_chunk_ids": [
+            "S8::c00"
+          ],
+          "gold_answer": "Reduces handshake latency from 2-RTT to 1-RTT for full handshakes and 0-RTT for resumption",
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S8::c00",
+            "S8::c01",
+            "S4::c02",
+            "S1::c02",
+            "S1::c03",
+            "S7::c01"
+          ]
+        },
+        {
+          "qid": "q015",
+          "bucket": "answerable",
+          "is_answerable": true,
+          "abstained": true,
+          "gold_chunk_ids": [
+            "S8::c01"
+          ],
+          "gold_answer": "TLS_AES_128_GCM_SHA256, TLS_AES_256_GCM_SHA384, TLS_CHACHA20_POLY1305_SHA256",
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S8::c01",
+            "S8::c00",
+            "S4::c02",
+            "S2::c02",
+            "S4::c01",
+            "S1::c02"
+          ]
+        },
+        {
+          "qid": "q016",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S4::c00",
+            "S8::c01",
+            "S1::c00",
+            "S3::c02",
+            "S2::c01",
+            "S6::c00"
+          ]
+        },
+        {
+          "qid": "q017",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S1::c03",
+            "S1::c00",
+            "S1::c01",
+            "S3::c00",
+            "S6::c01",
+            "S1::c02"
+          ]
+        },
+        {
+          "qid": "q018",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S3::c02",
+            "S3::c00",
+            "S6::c00",
+            "S1::c00",
+            "S8::c01",
+            "S3::c01"
+          ]
+        },
+        {
+          "qid": "q019",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S8::c01",
+            "S2::c02",
+            "S8::c00",
+            "S7::c00",
+            "S7::c01",
+            "S4::c01"
+          ]
+        },
+        {
+          "qid": "q020",
+          "bucket": "unanswerable",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S8::c01",
+            "S5::c01",
+            "S8::c00",
+            "S1::c02",
+            "S5::c00",
+            "S4::c01"
+          ]
+        },
+        {
+          "qid": "q021",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S1::c03",
+            "S3::c02",
+            "S6::c00",
+            "S5::c03",
+            "S6::c01",
+            "S8::c01"
+          ]
+        },
+        {
+          "qid": "q022",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S1::c03",
+            "S4::c01",
+            "S5::c03",
+            "S3::c02",
+            "S4::c00",
+            "S4::c02"
+          ]
+        },
+        {
+          "qid": "q023",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S1::c03",
+            "S3::c02",
+            "S2::c02",
+            "S5::c03",
+            "S2::c00",
+            "S2::c03"
+          ]
+        },
+        {
+          "qid": "q024",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S7::c00",
+            "S7::c01",
+            "S7::c02",
+            "S5::c00",
+            "S1::c00",
+            "S3::c00"
+          ]
+        },
+        {
+          "qid": "q025",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S8::c00",
+            "S5::c03",
+            "S3::c02",
+            "S1::c03",
+            "S8::c01",
+            "S4::c02"
+          ]
+        },
+        {
+          "qid": "q026",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S3::c00",
+            "S3::c02",
+            "S3::c01",
+            "S1::c03",
+            "S2::c02",
+            "S1::c00"
+          ]
+        },
+        {
+          "qid": "q027",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S6::c00",
+            "S6::c01",
+            "S1::c00",
+            "S5::c00",
+            "S1::c02",
+            "S3::c00"
+          ]
+        },
+        {
+          "qid": "q028",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S1::c01",
+            "S1::c00",
+            "S8::c01",
+            "S1::c02",
+            "S1::c03",
+            "S6::c01"
+          ]
+        },
+        {
+          "qid": "q029",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S3::c00",
+            "S3::c01",
+            "S3::c02",
+            "S1::c00",
+            "S1::c03",
+            "S6::c01"
+          ]
+        },
+        {
+          "qid": "q030",
+          "bucket": "adversarial",
+          "is_answerable": false,
+          "abstained": true,
+          "gold_chunk_ids": [],
+          "gold_answer": null,
+          "predicted_chunk_ids": [],
+          "answer_text": "",
+          "context_injected": [
+            "S5::c00",
+            "S5::c01",
+            "S5::c02",
+            "S5::c03",
+            "S1::c02",
+            "S8::c01"
+          ]
+        }
+      ]
+    }
+  }
+}

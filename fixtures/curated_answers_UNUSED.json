@@ -1,0 +1,227 @@
+{
+  "q001": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "CVE-2024-3094 is a critical supply-chain vulnerability discovered in XZ Utils versions 5.6.0 and 5.6.1 that alters functions within liblzma targeting OpenSSH server authentication.",
+        "citations": ["S1::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S1."
+  },
+  "q002": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "The backdoor payload intercepts the RSA key signature verification function RSA_public_decrypt in OpenSSH sshd.",
+        "citations": ["S1::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S1."
+  },
+  "q003": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "The vulnerability was initially identified by Andres Freund while benchmarking SSH latencies.",
+        "citations": ["S1::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S1."
+  },
+  "q004": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "CVSS v3.1 Base Score assigned to CVE-2024-3094 is 10.0 (Critical).",
+        "citations": ["S1::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S1."
+  },
+  "q005": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "Prevention controls include parameterized queries, positive server-side input validation, and context-aware escaping.",
+        "citations": ["S2::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S2."
+  },
+  "q006": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "CVE-2021-44228 refers to Log4Shell, a remote code execution vulnerability in Apache Log4j2 versions 2.0-beta9 through 2.14.1.",
+        "citations": ["S3::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S3."
+  },
+  "q007": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "Log4j resolves JNDI URLs by contacting the LDAP server to retrieve and execute remote Java class files.",
+        "citations": ["S3::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S3."
+  },
+  "q008": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "NIST AC-2(3) specifies automatically disabling inactive accounts after 90 days of operational inactivity.",
+        "citations": ["S4::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S4."
+  },
+  "q009": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "NIST AC-7 enforces account lockout when 5 consecutive invalid logon attempts occur within a 15-minute window.",
+        "citations": ["S4::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S4."
+  },
+  "q010": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "The root cause of Heartbleed is missing bounds checking on a TLS heartbeat extension request payload using memcpy.",
+        "citations": ["S5::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S5."
+  },
+  "q011": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "Threat group UNC2452 executed the SolarWinds SUNBURST attack against Orion platform releases.",
+        "citations": ["S6::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S6."
+  },
+  "q012": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "SUNBURST remains dormant for up to 14 days before attempting DNS lookups against C2 domains.",
+        "citations": ["S6::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S6."
+  },
+  "q013": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "SwiftSafe guarantees zero raw pointers in public API, requiring safe wrappers SafeRef or UniquePtr.",
+        "citations": ["S7::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S7."
+  },
+  "q014": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "TLS 1.3 reduces connection handshake latency from 2-RTT to 1-RTT for full handshakes and 0-RTT for resumption.",
+        "citations": ["S8::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S8."
+  },
+  "q015": {
+    "insufficient_evidence": false,
+    "claims": [
+      {
+        "text": "TLS 1.3 defines AEAD cipher suites including TLS_AES_128_GCM_SHA256, TLS_AES_256_GCM_SHA384, and TLS_CHACHA20_POLY1305_SHA256.",
+        "citations": ["S8::c00"]
+      }
+    ],
+    "reasoning": "Explicitly stated in S8."
+  },
+  "q016": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "Corporate financial revenue data is not present in technical advisories corpus."
+  },
+  "q017": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "eBPF kernel version details absent from corpus."
+  },
+  "q018": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "General geography facts absent from corpus."
+  },
+  "q019": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "Cisco router configuration commands absent from corpus."
+  },
+  "q020": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "WPA3 enterprise specifications absent from corpus."
+  },
+  "q021": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "Advisory discusses SUNBURST backdoor but does not state a numeric CVSS v3.1 score."
+  },
+  "q022": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "NIST SP 800-53 controls specify security guidelines rather than vulnerability CVSS scores."
+  },
+  "q023": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "OWASP Top 10 categories represent vulnerability classes, not single CVSS scores."
+  },
+  "q024": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "SwiftSafe is a system architecture specification, not a vulnerability with a CVE identifier."
+  },
+  "q025": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "RFC 8446 is an IETF protocol standard and does not carry a CVSS score."
+  },
+  "q026": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "Corpus specifies Log4j 2.17.1 for Java 8, but omits Java 7 patch version details."
+  },
+  "q027": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "Advisory discusses SUNBURST DLL but omits CVE-2020-10148 identifier."
+  },
+  "q028": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "Analysis names binary test files but excludes SHA-256 hash values."
+  },
+  "q029": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "Corpus describes Log4j JNDI LDAP lookup mechanism but omits default port numbers."
+  },
+  "q030": {
+    "insufficient_evidence": true,
+    "claims": [],
+    "reasoning": "Heartbleed vulnerability affects OpenSSL 1.0.1, not OpenSSL 1.1.1."
+  }
+}

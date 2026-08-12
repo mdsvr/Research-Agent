@@ -1,0 +1,58 @@
+[
+  {
+    "doc_id": "S1",
+    "filename": "S1_cve_2024_3094_xz_backdoor.md",
+    "title": "Technical Analysis of CVE-2024-3094: XZ Utils Backdoor",
+    "char_count": 1599,
+    "chunk_count": 4
+  },
+  {
+    "doc_id": "S2",
+    "filename": "S2_owasp_top_10_injection.md",
+    "title": "OWASP Top 10 Security Focus: Injection and Broken Access Control",
+    "char_count": 1695,
+    "chunk_count": 4
+  },
+  {
+    "doc_id": "S3",
+    "filename": "S3_log4j_cve_2021_44228.md",
+    "title": "Technical Deep Dive: Log4Shell Vulnerability (CVE-2021-44228)",
+    "char_count": 1397,
+    "chunk_count": 3
+  },
+  {
+    "doc_id": "S4",
+    "filename": "S4_nist_sp800_53_access_control.md",
+    "title": "NIST Special Publication 800-53 Revision 5: Access Control (AC) Security Controls",
+    "char_count": 1416,
+    "chunk_count": 3
+  },
+  {
+    "doc_id": "S5",
+    "filename": "S5_openssl_heartbleed_cve_2014_0160.md",
+    "title": "Heartbleed Bug Advisory: OpenSSL Memory Disclosure (CVE-2014-0160)",
+    "char_count": 1324,
+    "chunk_count": 4
+  },
+  {
+    "doc_id": "S6",
+    "filename": "S6_solarwinds_sunburst_advisory.md",
+    "title": "Cybersecurity Advisory: SolarWinds SUNBURST Supply Chain Attack",
+    "char_count": 1156,
+    "chunk_count": 3
+  },
+  {
+    "doc_id": "S7",
+    "filename": "S7_swiftsafe_memory_safety_spec.md",
+    "title": "SwiftSafe System Architecture & Memory Safety Guidelines",
+    "char_count": 1030,
+    "chunk_count": 3
+  },
+  {
+    "doc_id": "S8",
+    "filename": "S8_tls_13_rfc8446_security_overview.md",
+    "title": "RFC 8446 Security Overview: Transport Layer Security (TLS) Protocol Version 1.3",
+    "char_count": 860,
+    "chunk_count": 2
+  }
+]

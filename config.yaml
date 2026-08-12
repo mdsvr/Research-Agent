@@ -1,0 +1,62 @@
+corpus_dir: data/corpus
+index_dir: data/index
+manifest_path: data/manifest.json
+trace_dir: traces
+
+chunk:
+  # Corpus documents are 110-240 words. At 256 tokens every document collapsed into a
+  # single chunk, which made citations document-level and the reranker score useless as
+  # a relevance signal. 96 tokens tracks the markdown section structure (2-4 chunks/doc).
+  target_tokens: 96
+  overlap_sentences: 1
+
+embedding:
+  model: BAAI/bge-small-en-v1.5
+  query_prefix: "Represent this sentence for searching relevant passages: "
+
+retrieval:
+  hybrid: true
+  dense_k: 20
+  bm25_k: 20
+  rrf_k: 60
+  final_k: 6
+
+rerank:
+  enabled: true
+  model: BAAI/bge-reranker-v2-m3
+
+verify:
+  enabled: true
+  # Must be a sequence-classification model loadable by sentence_transformers CrossEncoder.
+  # Measured on eval/verifier_bench.jsonl (py -m eval.bench_verifier), 24 labelled pairs:
+  #   MiniCheck-DeBERTa-v3-Large       acc 0.92  keeps 92% of true claims, drops 91% of false
+  #   DeBERTa-v3-base-mnli-fever-anli  acc 0.88  keeps 77%, drops 100%  (~3x faster, 184M)
+  #   nli-deberta-v3-small             acc 0.67  keeps 46%, drops 91%   (the old default)
+  # MiniCheck is a purpose-built fact-checker rather than a generic NLI model, which is
+  # what the multi-hop and title-coreference cases needed. ~1.6 GB; swap in the base model
+  # above (entail_index: null) if that is too heavy.
+  model: lytang/MiniCheck-DeBERTa-v3-Large
+  entail_index: 1   # binary model: column 1 = "supported". Generic NLI models: leave null.
+  support_threshold: 0.5
+  premise_window_chars: 160
+  # Word-overlap degradation is opt-in: it is not entailment and must never be
+  # reported as such. Verdicts record which backend actually scored them.
+  allow_heuristic_fallback: false
+
+abstain:
+  gate_a: true
+  gate_b: true
+  min_rerank_score: 0.35
+  min_supported_claims: 1
+
+llm:
+  # Tried in order; first one that returns valid JSON wins. Needs the matching env var:
+  # groq -> GROQ_API_KEY, gemini -> GEMINI_API_KEY, openrouter -> OPENROUTER_API_KEY.
+  # ollama needs a local server on :11434. Providers without a key are skipped silently.
+  providers: [groq, gemini, openrouter, ollama, offline]
+  groq_model: openai/gpt-oss-120b
+  gemini_model: gemini-3.6-flash
+  openrouter_model: google/gemini-2.0-flash-001
+  ollama_model: llama3.1:8b
+  temperature: 0.0
+  max_retries: 1

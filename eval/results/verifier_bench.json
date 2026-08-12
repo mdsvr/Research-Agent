@@ -1,0 +1,646 @@
+[
+  {
+    "model": "cross-encoder/nli-deberta-v3-small",
+    "rows": [
+      {
+        "vid": "v01",
+        "gold": true,
+        "score": 0.9980266690254211,
+        "note": "identifier lives in the document title, value in the chunk body"
+      },
+      {
+        "vid": "v02",
+        "gold": true,
+        "score": 0.02454422228038311,
+        "note": "q005 drop: imperative source restated as a declarative claim"
+      },
+      {
+        "vid": "v03",
+        "gold": true,
+        "score": 0.8260864615440369,
+        "note": "imperative restated as declarative"
+      },
+      {
+        "vid": "v04",
+        "gold": true,
+        "score": 0.5282350182533264,
+        "note": "imperative restated; 'to prevent injection' comes from the section heading"
+      },
+      {
+        "vid": "v05",
+        "gold": true,
+        "score": 0.00018592823471408337,
+        "note": "coreference: 'The vulnerability' resolves via the title"
+      },
+      {
+        "vid": "v06",
+        "gold": true,
+        "score": 0.9912154674530029,
+        "note": "subject named only in the title"
+      },
+      {
+        "vid": "v07",
+        "gold": true,
+        "score": 0.28462278842926025,
+        "note": "straightforward positive"
+      },
+      {
+        "vid": "v08",
+        "gold": true,
+        "score": 0.008848175406455994,
+        "note": "parenthetical value bound to the surrounding sentence"
+      },
+      {
+        "vid": "v09",
+        "gold": true,
+        "score": 0.9893355965614319,
+        "note": "straightforward positive"
+      },
+      {
+        "vid": "v10",
+        "gold": true,
+        "score": 0.9976707100868225,
+        "note": "title-only identifier, bare score line at the end of an unrelated remediation chunk"
+      },
+      {
+        "vid": "v11",
+        "gold": true,
+        "score": 0.3340965509414673,
+        "note": "'The malware' resolves to SUNBURST from the title"
+      },
+      {
+        "vid": "v12",
+        "gold": true,
+        "score": 0.08647003024816513,
+        "note": "subject named only in the title"
+      },
+      {
+        "vid": "v13",
+        "gold": true,
+        "score": 0.001210378366522491,
+        "note": "straightforward positive"
+      },
+      {
+        "vid": "v14",
+        "gold": false,
+        "score": 0.0014114181976765394,
+        "note": "verbatim quote, falsified number: the over-acceptance case"
+      },
+      {
+        "vid": "v15",
+        "gold": false,
+        "score": 0.00013234686048235744,
+        "note": "value absent from the corpus entirely (mirrors gold q021)"
+      },
+      {
+        "vid": "v16",
+        "gold": false,
+        "score": 0.000761386239901185,
+        "note": "verbatim quote, falsified interval"
+      },
+      {
+        "vid": "v17",
+        "gold": false,
+        "score": 0.0002434564958093688,
+        "note": "verbatim quote, falsified count"
+      },
+      {
+        "vid": "v18",
+        "gold": false,
+        "score": 0.0013217650121077895,
+        "note": "verbatim quote, falsified unit"
+      },
+      {
+        "vid": "v19",
+        "gold": false,
+        "score": 0.00018064149480778724,
+        "note": "port number absent from the corpus (mirrors gold q029)"
+      },
+      {
+        "vid": "v20",
+        "gold": false,
+        "score": 0.0011053923517465591,
+        "note": "verbatim quote, falsified duration"
+      },
+      {
+        "vid": "v21",
+        "gold": false,
+        "score": 0.5597668290138245,
+        "note": "directly contradicted by the quoted span"
+      },
+      {
+        "vid": "v22",
+        "gold": false,
+        "score": 0.36314499378204346,
+        "note": "verbatim quote, falsified version range (mirrors gold q030)"
+      },
+      {
+        "vid": "v23",
+        "gold": false,
+        "score": 0.00046067184302955866,
+        "note": "verbatim quote, one-token identifier substitution"
+      },
+      {
+        "vid": "v24",
+        "gold": false,
+        "score": 0.0008866179268807173,
+        "note": "contradicts the quoted requirement"
+      }
+    ],
+    "seconds": 12.0,
+    "tp": 6,
+    "fn": 7,
+    "fp": 1,
+    "tn": 10,
+    "accuracy": 0.6666666666666666,
+    "recall": 0.46153846153846156,
+    "specificity": 0.9090909090909091,
+    "mean_pos": 0.4669652305254623,
+    "mean_neg": 0.08449231992893726,
+    "separation": -0.5595809007791104,
+    "best_tau": 0.0014
+  },
+  {
+    "model": "MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli",
+    "rows": [
+      {
+        "vid": "v01",
+        "gold": true,
+        "score": 0.9976047277450562,
+        "note": "identifier lives in the document title, value in the chunk body"
+      },
+      {
+        "vid": "v02",
+        "gold": true,
+        "score": 0.7257749438285828,
+        "note": "q005 drop: imperative source restated as a declarative claim"
+      },
+      {
+        "vid": "v03",
+        "gold": true,
+        "score": 0.9916660189628601,
+        "note": "imperative restated as declarative"
+      },
+      {
+        "vid": "v04",
+        "gold": true,
+        "score": 0.8135421276092529,
+        "note": "imperative restated; 'to prevent injection' comes from the section heading"
+      },
+      {
+        "vid": "v05",
+        "gold": true,
+        "score": 0.9962831139564514,
+        "note": "coreference: 'The vulnerability' resolves via the title"
+      },
+      {
+        "vid": "v06",
+        "gold": true,
+        "score": 0.990480363368988,
+        "note": "subject named only in the title"
+      },
+      {
+        "vid": "v07",
+        "gold": true,
+        "score": 0.28993165493011475,
+        "note": "straightforward positive"
+      },
+      {
+        "vid": "v08",
+        "gold": true,
+        "score": 0.020065713673830032,
+        "note": "parenthetical value bound to the surrounding sentence"
+      },
+      {
+        "vid": "v09",
+        "gold": true,
+        "score": 0.9941838383674622,
+        "note": "straightforward positive"
+      },
+      {
+        "vid": "v10",
+        "gold": true,
+        "score": 0.9715221524238586,
+        "note": "title-only identifier, bare score line at the end of an unrelated remediation chunk"
+      },
+      {
+        "vid": "v11",
+        "gold": true,
+        "score": 0.040594909340143204,
+        "note": "'The malware' resolves to SUNBURST from the title"
+      },
+      {
+        "vid": "v12",
+        "gold": true,
+        "score": 0.9972800016403198,
+        "note": "subject named only in the title"
+      },
+      {
+        "vid": "v13",
+        "gold": true,
+        "score": 0.9973416924476624,
+        "note": "straightforward positive"
+      },
+      {
+        "vid": "v14",
+        "gold": false,
+        "score": 0.0011115955421701074,
+        "note": "verbatim quote, falsified number: the over-acceptance case"
+      },
+      {
+        "vid": "v15",
+        "gold": false,
+        "score": 0.019140172749757767,
+        "note": "value absent from the corpus entirely (mirrors gold q021)"
+      },
+      {
+        "vid": "v16",
+        "gold": false,
+        "score": 0.0005322584765963256,
+        "note": "verbatim quote, falsified interval"
+      },
+      {
+        "vid": "v17",
+        "gold": false,
+        "score": 0.0025997741613537073,
+        "note": "verbatim quote, falsified count"
+      },
+      {
+        "vid": "v18",
+        "gold": false,
+        "score": 0.0019368999637663364,
+        "note": "verbatim quote, falsified unit"
+      },
+      {
+        "vid": "v19",
+        "gold": false,
+        "score": 0.00036513578379526734,
+        "note": "port number absent from the corpus (mirrors gold q029)"
+      },
+      {
+        "vid": "v20",
+        "gold": false,
+        "score": 0.0011791327269747853,
+        "note": "verbatim quote, falsified duration"
+      },
+      {
+        "vid": "v21",
+        "gold": false,
+        "score": 0.000634038238786161,
+        "note": "directly contradicted by the quoted span"
+      },
+      {
+        "vid": "v22",
+        "gold": false,
+        "score": 0.004539970774203539,
+        "note": "verbatim quote, falsified version range (mirrors gold q030)"
+      },
+      {
+        "vid": "v23",
+        "gold": false,
+        "score": 0.0011056929361075163,
+        "note": "verbatim quote, one-token identifier substitution"
+      },
+      {
+        "vid": "v24",
+        "gold": false,
+        "score": 0.009226730093359947,
+        "note": "contradicts the quoted requirement"
+      }
+    ],
+    "seconds": 58.7,
+    "tp": 10,
+    "fn": 3,
+    "fp": 0,
+    "tn": 11,
+    "accuracy": 0.875,
+    "recall": 0.7692307692307693,
+    "specificity": 1.0,
+    "mean_pos": 0.755867019868814,
+    "mean_neg": 0.0038519455860792236,
+    "separation": 0.0009255409240722656,
+    "best_tau": 0.0191
+  },
+  {
+    "model": "tasksource/deberta-small-long-nli",
+    "rows": [
+      {
+        "vid": "v01",
+        "gold": true,
+        "score": 0.9769796133041382,
+        "note": "identifier lives in the document title, value in the chunk body"
+      },
+      {
+        "vid": "v02",
+        "gold": true,
+        "score": 0.8526226282119751,
+        "note": "q005 drop: imperative source restated as a declarative claim"
+      },
+      {
+        "vid": "v03",
+        "gold": true,
+        "score": 0.6893084645271301,
+        "note": "imperative restated as declarative"
+      },
+      {
+        "vid": "v04",
+        "gold": true,
+        "score": 0.46289604902267456,
+        "note": "imperative restated; 'to prevent injection' comes from the section heading"
+      },
+      {
+        "vid": "v05",
+        "gold": true,
+        "score": 0.99564528465271,
+        "note": "coreference: 'The vulnerability' resolves via the title"
+      },
+      {
+        "vid": "v06",
+        "gold": true,
+        "score": 0.9134568572044373,
+        "note": "subject named only in the title"
+      },
+      {
+        "vid": "v07",
+        "gold": true,
+        "score": 0.9883067011833191,
+        "note": "straightforward positive"
+      },
+      {
+        "vid": "v08",
+        "gold": true,
+        "score": 0.9338071346282959,
+        "note": "parenthetical value bound to the surrounding sentence"
+      },
+      {
+        "vid": "v09",
+        "gold": true,
+        "score": 0.849845290184021,
+        "note": "straightforward positive"
+      },
+      {
+        "vid": "v10",
+        "gold": true,
+        "score": 0.9830570816993713,
+        "note": "title-only identifier, bare score line at the end of an unrelated remediation chunk"
+      },
+      {
+        "vid": "v11",
+        "gold": true,
+        "score": 0.47228649258613586,
+        "note": "'The malware' resolves to SUNBURST from the title"
+      },
+      {
+        "vid": "v12",
+        "gold": true,
+        "score": 0.881817102432251,
+        "note": "subject named only in the title"
+      },
+      {
+        "vid": "v13",
+        "gold": true,
+        "score": 0.9793230295181274,
+        "note": "straightforward positive"
+      },
+      {
+        "vid": "v14",
+        "gold": false,
+        "score": 0.011417805217206478,
+        "note": "verbatim quote, falsified number: the over-acceptance case"
+      },
+      {
+        "vid": "v15",
+        "gold": false,
+        "score": 0.047733455896377563,
+        "note": "value absent from the corpus entirely (mirrors gold q021)"
+      },
+      {
+        "vid": "v16",
+        "gold": false,
+        "score": 0.9915274977684021,
+        "note": "verbatim quote, falsified interval"
+      },
+      {
+        "vid": "v17",
+        "gold": false,
+        "score": 0.9266142249107361,
+        "note": "verbatim quote, falsified count"
+      },
+      {
+        "vid": "v18",
+        "gold": false,
+        "score": 0.08066114038228989,
+        "note": "verbatim quote, falsified unit"
+      },
+      {
+        "vid": "v19",
+        "gold": false,
+        "score": 0.13492722809314728,
+        "note": "port number absent from the corpus (mirrors gold q029)"
+      },
+      {
+        "vid": "v20",
+        "gold": false,
+        "score": 0.07820557802915573,
+        "note": "verbatim quote, falsified duration"
+      },
+      {
+        "vid": "v21",
+        "gold": false,
+        "score": 0.6295307278633118,
+        "note": "directly contradicted by the quoted span"
+      },
+      {
+        "vid": "v22",
+        "gold": false,
+        "score": 0.8374083042144775,
+        "note": "verbatim quote, falsified version range (mirrors gold q030)"
+      },
+      {
+        "vid": "v23",
+        "gold": false,
+        "score": 0.011579261161386967,
+        "note": "verbatim quote, one-token identifier substitution"
+      },
+      {
+        "vid": "v24",
+        "gold": false,
+        "score": 0.35146063566207886,
+        "note": "contradicts the quoted requirement"
+      }
+    ],
+    "seconds": 51.8,
+    "tp": 11,
+    "fn": 2,
+    "fp": 4,
+    "tn": 7,
+    "accuracy": 0.75,
+    "recall": 0.8461538461538461,
+    "specificity": 0.6363636363636364,
+    "mean_pos": 0.8445655176272759,
+    "mean_neg": 0.3728241690180518,
+    "separation": -0.5286314487457275,
+    "best_tau": 0.3515
+  },
+  {
+    "model": "lytang/MiniCheck-DeBERTa-v3-Large",
+    "rows": [
+      {
+        "vid": "v01",
+        "gold": true,
+        "score": 0.8797870874404907,
+        "note": "identifier lives in the document title, value in the chunk body"
+      },
+      {
+        "vid": "v02",
+        "gold": true,
+        "score": 0.8723428249359131,
+        "note": "q005 drop: imperative source restated as a declarative claim"
+      },
+      {
+        "vid": "v03",
+        "gold": true,
+        "score": 0.9804297685623169,
+        "note": "imperative restated as declarative"
+      },
+      {
+        "vid": "v04",
+        "gold": true,
+        "score": 0.9371601939201355,
+        "note": "imperative restated; 'to prevent injection' comes from the section heading"
+      },
+      {
+        "vid": "v05",
+        "gold": true,
+        "score": 0.7722153663635254,
+        "note": "coreference: 'The vulnerability' resolves via the title"
+      },
+      {
+        "vid": "v06",
+        "gold": true,
+        "score": 0.8966379165649414,
+        "note": "subject named only in the title"
+      },
+      {
+        "vid": "v07",
+        "gold": true,
+        "score": 0.6769852638244629,
+        "note": "straightforward positive"
+      },
+      {
+        "vid": "v08",
+        "gold": true,
+        "score": 0.3410229980945587,
+        "note": "parenthetical value bound to the surrounding sentence"
+      },
+      {
+        "vid": "v09",
+        "gold": true,
+        "score": 0.8481326699256897,
+        "note": "straightforward positive"
+      },
+      {
+        "vid": "v10",
+        "gold": true,
+        "score": 0.6407614946365356,
+        "note": "title-only identifier, bare score line at the end of an unrelated remediation chunk"
+      },
+      {
+        "vid": "v11",
+        "gold": true,
+        "score": 0.817415714263916,
+        "note": "'The malware' resolves to SUNBURST from the title"
+      },
+      {
+        "vid": "v12",
+        "gold": true,
+        "score": 0.9300041794776917,
+        "note": "subject named only in the title"
+      },
+      {
+        "vid": "v13",
+        "gold": true,
+        "score": 0.9803698062896729,
+        "note": "straightforward positive"
+      },
+      {
+        "vid": "v14",
+        "gold": false,
+        "score": 0.01820383034646511,
+        "note": "verbatim quote, falsified number: the over-acceptance case"
+      },
+      {
+        "vid": "v15",
+        "gold": false,
+        "score": 0.012367693707346916,
+        "note": "value absent from the corpus entirely (mirrors gold q021)"
+      },
+      {
+        "vid": "v16",
+        "gold": false,
+        "score": 0.04702409729361534,
+        "note": "verbatim quote, falsified interval"
+      },
+      {
+        "vid": "v17",
+        "gold": false,
+        "score": 0.02984808385372162,
+        "note": "verbatim quote, falsified count"
+      },
+      {
+        "vid": "v18",
+        "gold": false,
+        "score": 0.023450277745723724,
+        "note": "verbatim quote, falsified unit"
+      },
+      {
+        "vid": "v19",
+        "gold": false,
+        "score": 0.015477489680051804,
+        "note": "port number absent from the corpus (mirrors gold q029)"
+      },
+      {
+        "vid": "v20",
+        "gold": false,
+        "score": 0.025240067392587662,
+        "note": "verbatim quote, falsified duration"
+      },
+      {
+        "vid": "v21",
+        "gold": false,
+        "score": 0.049627672880887985,
+        "note": "directly contradicted by the quoted span"
+      },
+      {
+        "vid": "v22",
+        "gold": false,
+        "score": 0.9201819896697998,
+        "note": "verbatim quote, falsified version range (mirrors gold q030)"
+      },
+      {
+        "vid": "v23",
+        "gold": false,
+        "score": 0.07719460129737854,
+        "note": "verbatim quote, one-token identifier substitution"
+      },
+      {
+        "vid": "v24",
+        "gold": false,
+        "score": 0.030942942947149277,
+        "note": "contradicts the quoted requirement"
+      }
+    ],
+    "seconds": 156.4,
+    "tp": 12,
+    "fn": 1,
+    "fp": 1,
+    "tn": 10,
+    "accuracy": 0.9166666666666666,
+    "recall": 0.9230769230769231,
+    "specificity": 0.9090909090909091,
+    "mean_pos": 0.8133280987922962,
+    "mean_neg": 0.1135962497104298,
+    "separation": -0.5791589915752411,
+    "best_tau": 0.0772
+  }
+]
