@@ -46,7 +46,7 @@ class LLMConfig(BaseModel):
     providers: List[str] = ["groq", "gemini", "openrouter", "ollama", "offline"]
     groq_model: str = "llama-3.3-70b-versatile"
     gemini_model: str = "gemini-3.6-flash"
-    openrouter_model: str = "google/gemini-2.0-flash-001"
+    openrouter_model: str = "openai/gpt-oss-20b:free"
     ollama_model: str = "llama3.1:8b"
     temperature: float = 0.0
     max_retries: int = 1  # one re-ask on malformed JSON before falling to the next provider

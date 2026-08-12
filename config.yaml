@@ -53,10 +53,10 @@ llm:
   # Tried in order; first one that returns valid JSON wins. Needs the matching env var:
   # groq -> GROQ_API_KEY, gemini -> GEMINI_API_KEY, openrouter -> OPENROUTER_API_KEY.
   # ollama needs a local server on :11434. Providers without a key are skipped silently.
-  providers: [groq, gemini, openrouter, ollama, offline]
+  providers: [groq, openrouter, gemini, ollama, offline]
   groq_model: openai/gpt-oss-120b
   gemini_model: gemini-3.6-flash
-  openrouter_model: google/gemini-2.0-flash-001
+  openrouter_model: openai/gpt-oss-20b:free
   ollama_model: llama3.1:8b
   temperature: 0.0
   max_retries: 1

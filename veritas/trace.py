@@ -20,6 +20,13 @@ def save_trace(trace: TraceLog, cfg: Config) -> str:
         stem = "query_" + hashlib.sha256(trace.query.encode("utf-8")).hexdigest()[:10]
 
     filepath = os.path.join(cfg.trace_dir, f"trace_{stem}.json")
-    with open(filepath, "w", encoding="utf-8") as f:
-        f.write(trace.model_dump_json(indent=2))
+    try:
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(trace.model_dump_json(indent=2))
+    except OSError as e:
+        # A trace is an audit artifact, not a result. Losing an entire paid evaluation run
+        # to a transient file lock (seen: WinError 22 mid-run, writable again seconds later)
+        # trades something expensive for something reproducible. Loud, not fatal.
+        print(f"Warning: could not write trace {filepath}: {e}")
+        return ""
     return filepath

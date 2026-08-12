@@ -205,9 +205,12 @@ def _call_gemini(prompt: str, cfg: Config, valid_ids) -> Optional[AgentAnswer]:
     key = os.environ.get("GEMINI_API_KEY")
     if not key:
         return None
+    # Key goes in a header, never the query string. requests puts the full URL into every
+    # HTTPError message, so `?key=...` leaks the secret verbatim into logs, tracebacks and
+    # background-task output on any failure — observed with a real key during a 429.
     url = (f"https://generativelanguage.googleapis.com/v1beta/models/"
-           f"{cfg.llm.gemini_model}:generateContent?key={key}")
-    res = requests.post(url, timeout=30, json={
+           f"{cfg.llm.gemini_model}:generateContent")
+    res = requests.post(url, timeout=30, headers={"x-goog-api-key": key}, json={
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {"temperature": cfg.llm.temperature,
                              "responseMimeType": "application/json"},
