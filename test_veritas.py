@@ -454,13 +454,48 @@ def test_verifier_bench_quotes_are_verbatim_in_their_cited_chunks():
         assert needle in haystack, f"{item['vid']}: quote is not verbatim in its cited chunk"
 
 
-def _http_429(retry_after=None):
+def _http_429(retry_after=None, body=""):
     import requests
     response = requests.Response()
     response.status_code = 429
+    response._content = body.encode("utf-8")
     if retry_after is not None:
         response.headers["retry-after"] = str(retry_after)
     return requests.HTTPError("429", response=response)
+
+
+def test_a_long_burst_limit_is_waited_out_not_mistaken_for_a_daily_quota():
+    """The wait length does not tell you which limit fired. A 140s per-minute window cost a
+    whole benchmark run when this was decided by magnitude alone."""
+    from veritas.generate import _call_with_backoff
+    calls = []
+    tpm = ("Rate limit reached for model `openai/gpt-oss-120b` ... on tokens per minute "
+           "(TPM): Limit 8000, Used 7999. Please try again in 140s.")
+
+    def flaky(prompt, cfg, valid_ids):
+        calls.append(1)
+        if len(calls) == 1:
+            raise _http_429(retry_after=0, body=tpm)
+        return AgentAnswer(claims=[Claim(text="ok")], generator="groq:test")
+
+    answer = _call_with_backoff(flaky, "groq", "p", Config(), set())
+    assert answer is not None and len(calls) == 2, "a per-minute limit must be waited out"
+
+
+def test_a_declared_daily_limit_aborts_without_waiting():
+    from veritas.generate import _call_with_backoff, QuotaExhausted
+    tpd = ("Rate limit reached for model `llama-3.3-70b-versatile` ... on tokens per day "
+           "(TPD): Limit 100000, Used 99961. Please try again in 1.7s.")
+
+    def spent(prompt, cfg, valid_ids):
+        # Short retry-after: magnitude would call this transient, the body says otherwise.
+        raise _http_429(retry_after=2, body=tpd)
+
+    try:
+        _call_with_backoff(spent, "groq", "p", Config(), set())
+        raise AssertionError("a declared per-day limit must not be waited out")
+    except QuotaExhausted as e:
+        assert "per-day" in str(e)
 
 
 def test_spent_quota_aborts_instead_of_degrading_to_extractive():
@@ -591,6 +626,15 @@ def test_grading_sheet_never_discards_a_human_grade():
 
         emit(results_path=results, out_path=sheet, gold_paths=[])  # re-run after a new eval
         assert _read_jsonl(sheet)[0]["grade"] == "correct", "re-emitting wiped a human grade"
+
+        # But a grade belongs to the answer it was given for. A new run that produces a
+        # different answer must not inherit the old verdict.
+        record["answer_text"] = "The score is 7.5, per the advisory."
+        with open(results, "w", encoding="utf-8") as f:
+            json.dump({"variants": {"veritas_full": {"records": [record]}}}, f)
+        emit(results_path=results, out_path=sheet, gold_paths=[])
+        assert _read_jsonl(sheet)[0]["grade"] is None, \
+            "a grade rode along onto a different answer"
 
 
 def test_token_recall_proxy_is_measured_against_grades_not_assumed():

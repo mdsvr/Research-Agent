@@ -48,18 +48,36 @@ def emit(results_path: str = RESULTS_PATH, out_path: str = GRADES_PATH,
         records = json.load(f)["variants"]["veritas_full"]["records"]
 
     questions = _questions(gold_paths or ["eval/gold.jsonl", "eval/holdout.jsonl"])
-    existing = {row["qid"]: row.get("grade") for row in _read_jsonl(out_path)} \
+    existing = {row["qid"]: row for row in _read_jsonl(out_path)} \
         if os.path.exists(out_path) else {}
 
-    rows = [{
-        "qid": rec["qid"],
-        "question": questions.get(rec["qid"], "(question text not found)"),
-        "gold_answer": rec["gold_answer"],
-        "agent_answer": rec["answer_text"],
-        "grade": existing.get(rec["qid"]),  # one of VALID_GRADES, or null until graded
-        "grader_note": "",
-    } for rec in records
-        if rec["is_answerable"] and rec.get("gold_answer") and not rec["abstained"]]
+    def carry(rec):
+        """A grade belongs to the answer text it was given for, not to the question.
+
+        Keyed on qid alone, a grade awarded to last run's answer would ride along onto a
+        different answer from this one — the exact substitution the rest of this codebase
+        refuses to make. A changed answer drops back to ungraded.
+        """
+        previous = existing.get(rec["qid"])
+        if previous and previous.get("agent_answer") == rec["answer_text"]:
+            return previous.get("grade"), previous.get("grader_note", "")
+        return None, ""
+
+    rows = []
+    regraded = 0
+    for rec in records:
+        if not (rec["is_answerable"] and rec.get("gold_answer") and not rec["abstained"]):
+            continue
+        grade, note = carry(rec)
+        regraded += bool(existing.get(rec["qid"], {}).get("grade")) and not grade
+        rows.append({
+            "qid": rec["qid"],
+            "question": questions.get(rec["qid"], "(question text not found)"),
+            "gold_answer": rec["gold_answer"],
+            "agent_answer": rec["answer_text"],
+            "grade": grade,  # one of VALID_GRADES, or null until graded
+            "grader_note": note,
+        })
 
     tmp = out_path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
@@ -68,7 +86,8 @@ def emit(results_path: str = RESULTS_PATH, out_path: str = GRADES_PATH,
     os.replace(tmp, out_path)
 
     carried = sum(1 for row in rows if row["grade"])
-    print(f"Wrote {len(rows)} rows to {out_path} ({carried} grade(s) carried over).")
+    print(f"Wrote {len(rows)} rows to {out_path} ({carried} grade(s) carried over"
+          f"{f', {regraded} reset — the answer changed' if regraded else ''}).")
     print(f'Fill in "grade" on each row with one of: {", ".join(VALID_GRADES)}.')
     print("  correct = states the gold fact; partial = right but incomplete or hedged;")
     print("  wrong   = states something the gold answer does not support.")

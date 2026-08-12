@@ -261,8 +261,25 @@ class QuotaExhausted(RuntimeError):
     """
 
 
+_DAILY_QUOTA = re.compile(r"per\s+day|\bTPD\b|\bRPD\b|daily\s+(?:limit|quota)", re.I)
+
+
+def _names_a_daily_limit(response) -> bool:
+    """True when the provider says the 429 came from a per-day budget.
+
+    The length of the wait does not distinguish daily from burst, which is what this code
+    used to assume. Groq's per-day budget is a rolling window and can ask for 2 seconds
+    when it is nearly spent, while an ordinary per-minute limit asked for 140 and got a
+    whole benchmark run aborted for it. Only the body says which limit was hit.
+    """
+    try:
+        return bool(_DAILY_QUOTA.search(response.text[:2000]))
+    except Exception:
+        return False  # unreadable body: fall through to the wait-and-see path
+
+
 def _call_with_backoff(call, name: str, prompt: str, cfg: Config, valid_ids,
-                       max_waits: int = 5, max_delay: float = 60.0) -> Optional[AgentAnswer]:
+                       max_waits: int = 5, max_delay: float = 300.0) -> Optional[AgentAnswer]:
     """Calls a provider, waiting out HTTP 429 rate limits rather than falling through.
 
     Free tiers rate-limit well within a 120-question evaluation run. Treating a 429 as a
@@ -280,6 +297,13 @@ def _call_with_backoff(call, name: str, prompt: str, cfg: Config, valid_ids,
         except requests.HTTPError as e:
             if e.response is None or e.response.status_code != 429:
                 raise
+            if _names_a_daily_limit(e.response):
+                raise QuotaExhausted(
+                    f"provider '{name}' reports a per-day limit (HTTP 429). Waiting cannot "
+                    f"clear it, so the run aborts rather than filling up with extractive "
+                    f"fallbacks. Switch provider or model in config.yaml (llm.providers, "
+                    f"llm.{name}_model), or re-run with --offline to replay cache."
+                ) from e
             retry_after = e.response.headers.get("retry-after")
             try:
                 delay = float(retry_after)
@@ -287,10 +311,11 @@ def _call_with_backoff(call, name: str, prompt: str, cfg: Config, valid_ids,
                 retry_after, delay = None, 2.0 * (2 ** wait_number)
             if retry_after is not None and delay > max_delay:
                 raise QuotaExhausted(
-                    f"provider '{name}' asked for a {delay:.0f}s wait (HTTP 429) — that is a "
-                    f"quota window, not a burst limit. Aborting rather than filling the run "
-                    f"with extractive fallbacks. Wait it out, switch provider in "
-                    f"config.yaml (llm.providers), or re-run with --offline to replay cache."
+                    f"provider '{name}' asked for a {delay:.0f}s wait (HTTP 429), longer than "
+                    f"the {max_delay:.0f}s this run is willing to sleep per question. "
+                    f"Aborting rather than filling the run with extractive fallbacks. Wait it "
+                    f"out, switch provider in config.yaml (llm.providers), or re-run with "
+                    f"--offline to replay cache."
                 ) from e
             if wait_number == max_waits:
                 raise QuotaExhausted(

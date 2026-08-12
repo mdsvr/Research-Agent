@@ -44,9 +44,10 @@ a genuinely on-topic passage that simply does not contain the requested fact, an
 high as an answerable question. Raising τ to 0.90 would cut the false-answer rate to 13%
 but start refusing real questions.
 
-That gap is Gate B's job. Gate B needs a generator that can set `insufficient_evidence`;
-the extractive fallback cannot. In `eval/results/ablation_results.json` the ten questions
-that replayed a cached model answer do exercise Gate B — `veritas_full` refuses two that
-`plus_reranker` answers — while the twelve that fell back to extractive text cannot. Both
-columns are therefore a blend, and a clean measurement needs one generator answering every
-question: `py -m veritas eval` with a working key.
+That gap is Gate B's job, and the measured ladder shows it closing: false-answer rate falls
+from **33.3% at Gate A alone to 6.7% with Gate B and the verifier**, on 30 questions all
+answered live by `llama-3.1-8b-instant`. Of the ten adversarial questions, nine are refused.
+
+The cost is real and is reported alongside it: two answerable questions are also refused
+(13.3% over-refusal), and out of sample that cost is worse — four of twelve, 33.3%. See the
+evaluation tables in the README.

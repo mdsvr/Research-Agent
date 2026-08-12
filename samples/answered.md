@@ -1,22 +1,62 @@
 # Sample Runs: Answered Queries
 
-Verbatim console output from `py -m veritas ask "..." --offline` on the current corpus.
-No live API key was available on this machine, so generation came from the prompt-hash
-replay cache where a previous run had covered the exact prompt, and from the deterministic
-extractive fallback otherwise. The agent says so on every extractive answer rather than
-presenting an extract as a generated response.
-
-Traces for these runs are written to `traces/`.
+Verbatim console output from `py -m veritas ask "..."` against `llama-3.1-8b-instant`, the
+generator the shipped benchmark was measured with. Traces for these runs are in `traces/`.
 
 ---
 
-## Sample 1 — Quote grounding refusing a true claim
+## Sample 1 — Answered, citation verified
+
+**Query:** `What CVSS v3.1 base score was assigned to CVE-2024-3094?`
+
+```
+[ANSWER]
+- CVE-2024-3094 has a CVSS v3.1 base score of 10.0 (Critical) [S1::c03] (entailment 0.94 via lytang/MiniCheck-DeBERTa-v3-Large)
+```
+
+`S1::c03` is the annotated gold chunk. The 0.94 is a real support probability from the
+verifier, and this claim is the one the whole premise-construction design exists for: the
+chunk says *"CVSS v3.1 Base Score: 10.0 (Critical)"* and never repeats the CVE identifier,
+which lives in the document title. Scored against the bare chunk the same claim gets 0.002 —
+the model will not resolve the reference across sentences. The premise is therefore a window
+around the quote **headed by the source document's title**, which is part of the source, so
+it adds context and never evidence. See `verify.build_premise`.
+
+---
+
+## Sample 2 — The refusal the pipeline is built for
+
+**Query:** `What is the exact CVSS score of TLS 1.3 RFC 8446?`
+
+```
+[ABSTAINED]
+The generator declared insufficient evidence in context.
+Closest passages:
+  - [S8::c00] "# RFC 8446 Security Overview: Transport Layer Security (TLS) Protocol Version 1.3
+
+## Core Protocol Enhancements
+TLS 1.3..." (relevance: 0.42)
+  - [S5::c03] "## Fix and Remediation
+- Upgrade OpenSSL to version 1.0.1g or compile OpenSSL with flag `-DOPENSSL_NO_HEARTBEATS`.
+- Rev..." (relevance: 0.12)
+```
+
+RFC 8446 is a protocol standard and carries no CVSS score. The retrieved passage is
+genuinely about TLS 1.3, so Gate A passes — this is exactly the adversarial case Gate A
+cannot catch. The refusal comes from the generator setting `insufficient_evidence`, which
+the prompt spends most of its budget on, and Gate B honours it. The refusal is informative:
+it names the closest passages and their scores, so a reader can tell "not in this corpus"
+from "retrieval failed".
+
+---
+
+## Sample 3 — The verifier's ceiling, visible
 
 **Query:** `What functions were targeted in the XZ Utils backdoor?`
 
 ```
 [ABSTAINED]
-Post-verification check failed: 0 of 0 generated claims were verified by the NLI entailment model (minimum required: 1).
+Post-verification check failed: 0 of 1 generated claims were verified by the NLI entailment model (minimum required: 1).
 Closest matching passages:
   - [S1::c00] "# Technical Analysis of CVE-2024-3094: XZ Utils Backdoor
 
@@ -26,50 +66,9 @@ CVE-2024-3094 is a critical supply-chain vulnerabi..." (relevance: 0.99)
 Reason: Passages discuss the general topic but do not state the specific requested facts.
 ```
 
-The cached `llama-3.3-70b` answer for this prompt is **substantively right** — it names
-`liblzma`, OpenSSH server authentication and `RSA_public_decrypt`. It was refused anyway,
-because its supporting quote stitches two separate spans together with an ellipsis:
-
-```
-"The compromise alters functions within `liblzma`, specifically targeting OpenSSH server
- authentication mechanisms when linked against `systemd` socket activation libraries. ...
- The extracted object file intercepts the RSA key signature verification function
- `RSA_public_decrypt` in OpenSSH (`sshd`)."
-```
-
-Neither half is fabricated, but the string as a whole appears nowhere in the corpus, so the
-whitespace-normalised substring check drops it, Gate B sees zero surviving claims, and the
-agent abstains. This is the deliberate trade: the grounding check is not allowed to reason
-about what the model *meant*, because that is exactly the latitude a fabricated quote would
-exploit. The cost is visible in the evaluation table as a real over-refusal.
-
----
-
-## Sample 2 — The failure mode this pipeline is built to prevent, still visible without an LLM
-
-**Query:** `What is the exact CVSS score of TLS 1.3 RFC 8446?`
-
-```
-[ANSWER]
-- # RFC 8446 Security Overview: Transport Layer Security (TLS) Protocol Version 1.3
-...
-2. **Mandatory Perfect Forward Secrecy (PFS):** Removes RSA static key exchange; all
-handshakes require Ephemeral Diffie-Hellman (ECDHE or DHE).
-[S8::c00] (entailment 0.88 via lytang/MiniCheck-DeBERTa-v3-Large)
-
-Note: no language model was available, so this is a verbatim extract of the top-ranked
-passage, not a generated answer.
-```
-
-RFC 8446 is a protocol standard and carries no CVSS score. The retrieved passage is
-genuinely about TLS 1.3 (reranker score 0.98), so Gate A passes; Gate B cannot fire
-because the extractive fallback's claim trivially entails itself. This is the case that
-requires a real generator to set `insufficient_evidence`, and it is why the evaluation
-harness refuses to report end-to-end abstention numbers as representative in this mode.
-
-Reproduce with a generator configured:
-
-```bash
-export GROQ_API_KEY=...         # or GEMINI_API_KEY / OPENROUTER_API_KEY, or run Ollama
-py -m veritas ask "What is the exact CVSS score of TLS 1.3 RFC 8446?"
-```
+This one is a genuine over-refusal, kept here rather than hidden. The generator produced
+*"The functions within `liblzma` were targeted in the XZ Utils backdoor"* — supportable from
+`S1::c00` — and the verifier scored it 0.331, below the 0.5 support threshold, so Gate B
+refused. It is one of the two over-refusals behind the 13.3% ORR in the evaluation table,
+and it is the verifier ceiling documented as Limitation 6, not a retrieval or grounding
+failure. Retrieval put the right chunk first at 0.99.

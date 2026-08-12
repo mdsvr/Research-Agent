@@ -21,7 +21,7 @@ py -m veritas eval --gold eval/holdout.jsonl               # out-of-sample quest
 py -m veritas calibrate                                    # Gate A threshold sweep
 py -m veritas grade                                        # hand-grade answer correctness
 py -m eval.bench_verifier                                  # compare NLI verifier models
-py test_veritas.py                                         # self-check (40 assertions)
+py test_veritas.py                                         # self-check (42 assertions)
 ```
 
 ### Running with a generator (Groq)
@@ -54,17 +54,25 @@ Groq is the default provider: free tier, fast, and OpenAI-compatible JSON mode.
    py -m veritas eval                     # note: no --offline
    ```
 
-Model is `llm.groq_model` in `config.yaml` (currently `openai/gpt-oss-120b`). Smaller and
-faster: `llama-3.1-8b-instant`. Providers are tried in the order under `llm.providers`,
-then a prompt-hash replay cache, then the extractive fallback. A provider with no key set is
-skipped silently; malformed JSON is re-asked once (`llm.max_retries`) before falling through.
+Model is `llm.groq_model` in `config.yaml`, currently `llama-3.1-8b-instant` — the model the
+shipped ablation ladder was measured with, chosen because its free-tier daily budget is large
+enough to answer every question in every column. Stronger, with far smaller daily budgets:
+`openai/gpt-oss-120b` and `llama-3.3-70b-versatile`.
 
-**Rate limits.** A burst 429 is waited out (exponential backoff, `retry-after` honoured). A
-429 that waiting cannot fix — one asking for longer than 60s, or one that survives five
-waits — is treated as a spent quota: that provider is skipped for the rest of the process,
-and if no other provider can answer, **the run aborts** instead of degrading to extractive
-answers. A benchmark quietly filled with text no model produced is worse than a run that
-stopped.
+`llm.providers` ships pinned to `[groq, offline]`, deliberately. With a cascade, a mid-run
+rate limit hands the remaining questions to a *different* model and the columns quietly stop
+describing one system — the harness warns, but only after the tokens are spent. Widen it to
+`[groq, openrouter, gemini, ollama, offline]` for interactive use. A provider with no key set
+is skipped silently; malformed JSON is re-asked once (`llm.max_retries`) before falling
+through to the prompt-hash replay cache and then the extractive fallback.
+
+**Rate limits.** A burst 429 is waited out (exponential backoff, `retry-after` honoured, up
+to 300s per question). A 429 the provider *labels* as a per-day budget — Groq says
+`tokens per day (TPD)` in the body — is not waited out at all: that provider is skipped for
+the rest of the process, and if no other provider can answer, **the run aborts** instead of
+degrading to extractive answers. The label is the signal, not the wait length: a spent daily
+budget on a rolling window can ask for 2 seconds while an ordinary per-minute limit asks for
+140. Deciding this by duration cost one benchmark run here before it was fixed.
 
 ---
 
@@ -122,49 +130,61 @@ both shaped against it. A further 24 questions in [`eval/holdout.jsonl`](eval/ho
 were never used for tuning; see [Out-of-sample check](#out-of-sample-check).
 Corpus: 8 documents → 26 chunks.
 
-**Every column below is a real run.** The ablation variants are the same pipeline with
-stages disabled via config overrides (`eval/run_eval.py:ABLATIONS`), executed on the same
-30 questions.
+**Every column below is a real run, from one model.** The ablation variants are the same
+pipeline with stages disabled via config overrides (`eval/run_eval.py:ABLATIONS`), executed
+on the same 30 questions, every answer generated live by `llama-3.1-8b-instant`. The top row
+is the receipt: no cached replays, no extractive fallbacks, nothing to discount.
 
 | Metric | Naive dense | + Hybrid RRF | + Reranker & Gate A | Veritas full |
 |---|---|---|---|---|
-| **Answers from a model** | **30/30 cached** | **30/30 cached** | **10/22 cached** | **10/22 cached** |
-| Abstention accuracy | 100.0% | 96.7% | 76.7% | 70.0% |
-| False answer rate (FAR) | 0.0% | 0.0% | 46.7% | 46.7% |
-| Over-refusal rate (ORR) | 0.0% | 6.7% | 0.0% | 13.3% |
-| Gold citation precision | 76.5% | 76.5% | 84.2% | 83.3% |
-| Gold citation recall | 72.2% | 72.2% | 88.9% | 83.3% |
-| Gold citation F1 | 0.7429 | 0.7429 | 0.8649 | 0.8333 |
-| Gold answer token recall | 75.1% | 64.7% | 71.0% | 67.2% |
+| **Answers from a model** | **30/30** | **30/30** | **22/22** | **22/22** |
+| Abstention accuracy | 80.0% | 76.7% | 83.3% | **90.0%** |
+| False answer rate (FAR) | 40.0% | 46.7% | 33.3% | **6.7%** |
+| Over-refusal rate (ORR) | 0.0% | 0.0% | 0.0% | 13.3% |
+| Gold citation precision | 93.8% | 82.3% | 83.3% | 88.2% |
+| Gold citation recall | 83.3% | 77.8% | 83.3% | 83.3% |
+| Gold citation F1 | 0.8824 | 0.8000 | 0.8333 | 0.8571 |
+| Gold answer token recall | 59.0% | 65.8% | 60.6% | 57.3% |
 | Retrieval recall@6 | 100.0% | 93.3% | 100.0% | 100.0% |
 | Retrieval MRR | 0.8111 | 0.8667 | 0.9333 | 0.9333 |
+| NLI self-entailment | 100.0% | 100.0% | 100.0% | 79.2% |
 | Abstention signal AUROC | 0.5000 | 0.5000 | 0.9556 | 0.9556 |
 
-Produced by `py -m veritas eval --offline`; per-question detail in
-[`eval/results/ablation_results.json`](eval/results/ablation_results.json).
+Produced by `py -m veritas eval` (no `--offline`); per-question detail in
+[`eval/results/ablation_results.json`](eval/results/ablation_results.json), archived at
+[`gold_ladder_llama31_8b.json`](eval/results/gold_ladder_llama31_8b.json).
+
+**The headline is the FAR column: 40.0% → 6.7%.** Of the 15 questions whose answer is not in
+the corpus, the full pipeline answers exactly one. Gate A alone gets FAR to 33.3%; Gate B and
+the verifier take it the rest of the way, which is the gap Gate A structurally cannot close —
+an adversarial question retrieves a genuinely on-topic passage and scores like a real one.
 
 ### ⚠️ How to read these numbers
 
-- **The ablation columns are not comparable to each other in this run.** Read the top row
-  first. The replay cache is keyed on the prompt, and each variant retrieves a different
-  context, so the two left-hand columns replayed real model answers for all 30 questions
-  while the two right-hand ones had cache coverage for only 10 of the 22 they generated
-  for — the other 12 are extractive fallback. `naive_dense` scoring 100% abstention
-  accuracy is that artefact: with both gates off, every refusal in that column is the
-  *language model's* own `insufficient_evidence`, on a question set it happened to have
-  full coverage of. A clean ladder needs one generator answering every question in every
-  column: `py -m veritas eval` with a working API key.
-- **Gate B is measured here, on 10 questions.** Where the extractive fallback made Gate B
-  structurally unable to fire (its claim *is* its cited chunk, so it entails itself), the
-  cached model answers do exercise it: `veritas_full` refuses two answerable questions that
-  `plus_reranker` answers. One (q001) lost every claim at the quote-grounding check; the
-  other (q009) is the verifier's known parenthetical-binding failure, item 6 under
-  Limitations. That is a real 13.3% over-refusal, on a small and unrepresentative sample.
-- **Retrieval metrics and AUROC are generator-independent** and are valid as shown.
-- **FAR of 46.7% is Gate A working alone.** Seven of the ten adversarial questions
-  retrieve a genuinely on-topic passage (reranker score up to 0.98) that simply lacks the
-  requested fact. Gate A cannot separate them from real questions; that gap is precisely
-  what Gate B exists for.
+- **The refusals are not free, and the cost is 13.3% ORR.** Two answerable questions are
+  refused by the full pipeline that `plus_reranker` answers. Both are diagnosed, neither is
+  a mystery: q001's claim *"The functions within `liblzma` were targeted"* scored 0.331 —
+  the verifier ceiling, item 6 under Limitations — and on q015 the generator quoted a span
+  it had not cited, so quote grounding dropped it. That trade (one false answer avoided per
+  two real answers lost) is the tuning knob, and it is `abstain.min_supported_claims` plus
+  `verify.support_threshold`, not a mystery of the model.
+- **`naive_dense` refusing 60% of unanswerable questions is the prompt, not the gates.**
+  With both gates disabled the only refusal path left is the generator setting
+  `insufficient_evidence` itself, which the prompt spends most of its budget on. The gates
+  are what take the remaining 40% down to 6.7% — they are not carrying the whole load, and
+  the table would be dishonest if it implied they were.
+- **The one surviving false answer (q030) is not a hallucination.** Asked for the memory
+  leaked by Heartbleed *in OpenSSL 1.1.1* — a version the bug does not affect — the model
+  answered "up to 64 kilobytes ... in OpenSSL", dropping the version. The claim is true and
+  the verifier scored it 0.949, correctly: it *is* entailed by the cited source. The
+  verifier compares claim against source and never sees the question, so a true-but-not-
+  responsive answer is structurally invisible to it. This is the same failure the verifier
+  bench isolates as v22, and it is the honest ceiling of attribution-only verification.
+- **Retrieval metrics and AUROC are generator-independent** and are unchanged across runs.
+- **FAR of 33.3% at `plus_reranker` is Gate A working alone.** Seven of the ten adversarial
+  questions retrieve a genuinely on-topic passage (reranker score up to 0.98) that simply
+  lacks the requested fact. Gate A cannot separate them from real questions; that gap is
+  precisely what Gate B exists for, and the 33.3% → 6.7% step is it closing.
 - **Citation metrics are scored against annotated gold chunk ids**, not against the
   agent's own choices. Recall counts an answerable question the agent refused as a miss,
   so refusing cannot buy recall.
@@ -180,25 +200,48 @@ Produced by `py -m veritas eval --offline`; per-question detail in
 were fixed. Nothing has been tuned on them, and `calibrate` refuses to read any question
 carrying `split: holdout`, so that stays true by construction rather than by discipline.
 
-No generator was reachable for this run and the cache has no entries for these prompts, so
-**every holdout answer is extractive fallback**. Only the generator-independent rows below
-mean anything; the end-to-end columns are omitted rather than dressed up. Gate A fires
-before generation, so its FAR/ORR are also valid.
+Same ladder, same generator, same code — run with `py -m veritas eval --gold
+eval/holdout.jsonl`. Every answer is live model output.
 
-| Generator-independent metric | Gold (tuning, n=30) | Holdout (out-of-sample, n=24) |
-|---|---|---|
-| Retrieval recall@6 | 100.0% | 100.0% |
-| Retrieval MRR | 0.9333 | 0.9028 |
-| Abstention signal AUROC | 0.9556 | 0.9028 |
-| Gate A false answer rate | 46.7% | 33.3% |
-| Gate A over-refusal rate | 0.0% | 8.3% |
+| Metric | Naive dense | + Hybrid RRF | + Reranker & Gate A | Veritas full |
+|---|---|---|---|---|
+| **Answers from a model** | **24/24** | **24/24** | **15/15** | **15/15** |
+| Abstention accuracy | 70.8% | 75.0% | **79.2%** | 75.0% |
+| False answer rate (FAR) | 58.3% | 50.0% | 33.3% | **16.7%** |
+| Over-refusal rate (ORR) | 0.0% | 0.0% | 8.3% | 33.3% |
+| Gold citation precision | 90.9% | 90.9% | 100.0% | 100.0% |
+| Gold citation recall | 83.3% | 83.3% | 75.0% | 66.7% |
+| Gold answer token recall | 54.0% | 52.3% | 44.5% | 41.1% |
+| Retrieval recall@6 | 100.0% | 100.0% | 100.0% | 100.0% |
+| Retrieval MRR | 0.7778 | 0.8194 | 0.9028 | 0.9028 |
+| Abstention signal AUROC | 0.5000 | 0.5000 | 0.9028 | 0.9028 |
 
-**The Gate A threshold generalises.** τ_lo = 0.35 was chosen on the gold set; out of sample
-it refuses one answerable question (h07, "Which command-and-control domain did SUNBURST
-contact?") and lets through four adversarial ones — a slightly better FAR and a slightly
-worse ORR than in-sample. On 24 questions that difference is one question either way, so
-the honest reading is that the threshold is not visibly overfit, not that it improved.
-Detail: [`eval/results/ablation_results_holdout.json`](eval/results/ablation_results_holdout.json).
+**What generalises and what does not.** The FAR reduction holds — 58.3% → 16.7%, a 3.5×
+cut, close to the in-sample 6× — and retrieval is unchanged (recall@6 100%, MRR 0.9028 vs
+0.9333, AUROC 0.9028 vs 0.9556). The **over-refusal cost does not**: ORR triples from 13.3%
+in-sample to 33.3% out of sample, and that is enough to make `veritas_full`'s abstention
+accuracy (75.0%) *lower* than `plus_reranker`'s (79.2%) on this set. Four of twelve
+answerable holdout questions are refused. This is the single number that a tuning set would
+have hidden, and it is why the holdout exists.
+
+All four refusals are diagnosed, and only one is a threshold artefact:
+
+| | Cause |
+|---|---|
+| h04, h09 | The generator paraphrased its own quote (`env` for `environment variable`), so grounding dropped it. Working as intended. |
+| h05 | Verifier ceiling: *"OpenSSL version 1.0.1g fixes the Heartbleed bug"* scores 0.266 against a source phrased as an instruction ("Upgrade OpenSSL to version 1.0.1g"). |
+| h07 | Gate A: max reranker score 0.32 against τ_lo = 0.35. The one genuine threshold miss, and it is 0.03 wide. |
+
+**Both surviving false answers are the same architectural blind spot**, and it is the same
+one as gold's q030. h21 asks after how many days AC-2 requires accounts to be *deleted*; the
+model answered that they are *disabled* after 90 days — true, cited, entailed at 0.778.
+h24 asks SwiftSafe's default alignment; the model returned the allocator signature, entailed
+at 0.856. Across both question sets, **three of three** false answers are true-but-not-
+responsive rather than fabricated. Quote grounding and attribution verification are working
+exactly as designed and are structurally blind to this, because neither ever sees the
+question. Limitation 7.
+
+Detail: [`holdout_ladder_llama31_8b.json`](eval/results/holdout_ladder_llama31_8b.json).
 
 ### Verifier choice
 
@@ -234,9 +277,17 @@ per answered answerable question, and `py -m veritas grade --score` reads the gr
 It reports human accuracy and — the point of it — mean token recall split by human grade,
 so the lexical proxy is checked against the grades instead of standing in for them. The
 sheet deliberately omits the token-recall number: showing a grader the score they are
-validating anchors them to it. Re-running after a new evaluation carries existing grades
-forward by qid. **The sheet in this repo is emitted and ungraded** — 13 rows awaiting a
-human.
+validating anchors them to it.
+
+Re-running after a new evaluation carries grades forward **only when the answer text is
+unchanged**. A grade belongs to the answer it was given for, not to the question id — keyed
+on qid alone, last run's verdict would ride along onto a different answer, which is the
+substitution the rest of this codebase exists to refuse. Changed answers reset to ungraded
+and the count is printed.
+
+**The sheet in this repo is emitted and ungraded** — 13 rows from the shipped run, awaiting
+a human. Until it is filled, `Gold answer token recall` in the tables above is an
+unvalidated lexical proxy and should be read as one.
 
 ### Gate A threshold
 
@@ -256,8 +307,13 @@ meaningful tuning signal.
 
 The sweep runs on the tuning set only — questions carrying `split: holdout` are dropped
 with a message before any model loads, so passing a concatenated file cannot quietly tune
-the threshold on out-of-sample data. What that threshold then does out of sample is in
-[Out-of-sample check](#out-of-sample-check) above.
+the threshold on out-of-sample data.
+
+**Out of sample, τ_lo = 0.35 costs exactly one question**: h07 ("Which command-and-control
+domain did SUNBURST contact?") scores 0.32 and is refused. The threshold chosen for ORR 0.0%
+in-sample delivers ORR 8.3% at Gate A out of sample — one question, 0.03 of reranker score.
+That is the expected shape of a threshold fitted to 30 points, and it is small; the larger
+out-of-sample cost comes from Gate B, not Gate A.
 
 ---
 
@@ -340,32 +396,47 @@ Three things target it directly:
 
 ## ⚠️ Known Limitations
 
-1. **Gate B is measured on 10 questions, not 30.** No live generator was reachable when the
-   benchmark was run — the free-tier daily quota was spent — so the table mixes 10 cached
-   model answers with 12 extractive fallbacks, and the ablation columns have different
-   generator mixes. See the caveats above. Everything about the pipeline is in place to
-   produce a clean table; it needs one working API key and one run.
+1. **The benchmark is measured on one small generator.** Every column comes from
+   `llama-3.1-8b-instant`, chosen because it is the only free-tier model whose daily budget
+   covers all four ablation columns. A spot run of `openai/gpt-oss-120b` on the full pipeline
+   reached **FAR 0.0%** (versus 6.7%) at **ORR 26.7%** (versus 13.3%) — a stronger model
+   refuses more, and more accurately — but its 200k-token daily budget cannot fund a ladder,
+   so it is a single archived column
+   ([`gold_veritas_full_gptoss120b.json`](eval/results/gold_veritas_full_gptoss120b.json)),
+   not a headline. Note that run predates the quote-grounding fix below, so its ORR is an
+   overestimate. Numbers here will move with the generator; the pipeline is what is fixed.
 2. **Both question sets are self-authored.** The holdout set is out-of-sample — nothing was
    tuned on it, and `calibrate` refuses to read it — but the same person wrote both it and
    the corpus. It removes the tuning-overfit reading of the numbers, not the author-bias
    one. A set written by someone else remains stronger evidence.
 3. **Small-sample calibration.** τ_lo is calibrated on the 30 tuning questions; one
-   question is 3.3 percentage points.
+   question is 3.3 percentage points. Out of sample it costs one refusal (h07, scoring 0.32
+   against a 0.35 threshold) — small, but the sets are 30 and 24 questions, so no threshold
+   here should be read to two significant figures.
 4. **Answer correctness is graded by hand on a sample, not on every run.**
    `gold_answer_token_recall` is bag-of-words overlap and stays in the table because it is
    cheap and reruns automatically; `py -m veritas grade` is what tells you whether it means
    anything on a given run, by comparing it against human grades. Trust the proxy only as
    far as that comparison shows it separating correct answers from wrong ones.
-5. **Quote grounding refuses elided quotes, including correct ones.** Measured: for q001 the
-   generator produced a true claim whose supporting quote joined two real spans with an
-   ellipsis. No such string exists in the corpus, so every claim was dropped and the agent
-   abstained — one of the two over-refusals in the table. Accepting `...`-joined segments
-   would fix it and would still reject fabrications, but the check is deliberately left
-   with no latitude to interpret what the model meant. See `samples/answered.md`.
+5. **Quote grounding refuses elided quotes, including correct ones.** Observed with
+   `gpt-oss-120b`: a true claim whose supporting quote joined two real spans with an
+   ellipsis. No such string exists in the corpus, so the claim was dropped and the agent
+   abstained. Accepting `...`-joined segments would fix it and would still reject
+   fabrications, but the check is deliberately left with no latitude to interpret what the
+   model meant. Formatting *is* now tolerated — markdown emphasis is stripped before
+   matching, after two over-refusals were traced to a model faithfully copying the rendered
+   text of a bolded list item.
 6. **The verifier still misses a claim that needs two sentences joined.** Measured on
    `eval/verifier_bench.jsonl`: the one true claim MiniCheck drops binds a parenthetical
    ("5 consecutive invalid attempts") to the window around it. Better than the 7 the
-   previous model dropped, not zero.
+   previous model dropped, not zero. The same ceiling costs a real question in the shipped
+   run: q001's *"The functions within `liblzma` were targeted"* scores 0.331.
+7. **Attribution verification cannot see the question.** The verifier scores claim against
+   source, so a claim that is true, cited and entailed passes even when it does not answer
+   what was asked. The single false answer surviving the full pipeline (q030) is exactly
+   this: the question fixed a version the vulnerability does not affect, and the model
+   answered the un-versioned fact instead. Catching it needs a question-aware check —
+   an answer-relevance judge — which is a different component, not a threshold change.
 11. **The verifier accepts some plausible lexical substitutions.** Measured: it scores the
     false claim *"Heartbleed affects OpenSSL versions 1.1.1 through 1.1.1f"* at 0.92 against
     a premise stating 1.0.1 through 1.0.1f. Quote grounding does not catch this — the model
@@ -401,7 +472,7 @@ Research agent/
 ├── tasks/                      # 18 task specification files, incl. plan.md
 ├── veritas/
 │   ├── __main__.py             # entry point for `py -m veritas`
-│   ├── cli.py                  # ingest | ask | eval | calibrate
+│   ├── cli.py                  # ingest | ask | eval | calibrate | grade | providers
 │   ├── config.py               # pydantic config model
 │   ├── chunking.py             # unit-aware chunker with exact char offsets
 │   ├── ingest.py               # corpus loader & indexer
